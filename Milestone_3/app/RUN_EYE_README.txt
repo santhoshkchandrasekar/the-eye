@@ -1,5 +1,5 @@
 ========================================================
-  The EYE v3  -  Setup & Run Guide
+  The EYE v3.5  -  Setup & Run Guide
   Group 7  |  Deep Learning Project 1  |  Milestone 2 Extension
 ========================================================
 
@@ -41,7 +41,7 @@ In the same terminal:
 The launcher patches the weight paths for your machine automatically,
 then starts the app. Open your browser at:
 
-    http://127.0.0.1:7862
+    http://127.0.0.1:7867
 
 Stop the server with Ctrl+C.
 
@@ -72,7 +72,7 @@ FOLDER STRUCTURE (do not move files around)
 --------------------------------------------
 RUN_EYE/
   launch_eye.py              <- run this
-  m2_eye_app_v3.py           <- the app (do not run directly)
+  m2_eye_app_v35.py          <- the app (do not run directly)
   requirements.txt
   object_list.csv
   milestone2_outputs/
@@ -97,7 +97,7 @@ RUN_EYE/
 TROUBLESHOOTING
 ---------------
 "Project folder not found"
-  -> Make sure you run: python launch_eye.py  (not m2_eye_app_v3.py directly)
+  -> Make sure you run: python launch_eye.py  (not m2_eye_app_v35.py directly)
 
 "CUDA out of memory"
   -> The model uses ~1.5 GB VRAM at imgsz=1280. Close other GPU apps.

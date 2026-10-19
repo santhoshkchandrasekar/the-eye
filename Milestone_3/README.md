@@ -55,9 +55,10 @@ Milestone_3/
 │   ├── m2_boost.py                       # 3. SAM 2 cut-outs, training data, test sets, training, evaluation
 │   └── m2_boost_val.py                   # 4. model selection by the fixed rule, grid/scene thresholds, one look at tests
 ├── app/                                  # The EYE (local web app)
-│   ├── m2_eye_app_v3.py                  # The EYE v3 (port 7862), the final version
+│   ├── m2_eye_app_v35.py                 # The EYE v3.5 (port 7867), the current version: adds the COMPOUND view
+│   ├── m2_eye_app_v3.py                  # The EYE v3 (port 7862), the version described in the report
 │   ├── m2_eye_app_v2.py                  # v2 (port 7861), kept unchanged as a fallback
-│   ├── launch_eye.py                     # fixes the weight paths for the machine it runs on, then starts v3
+│   ├── launch_eye.py                     # fixes the weight paths for the machine it runs on, then starts v3.5
 │   ├── RUN_EYE_README.txt                # setup and folder layout The EYE expects
 │   └── requirements.txt
 ├── live_demo/                            # the public upload-only demo on Hugging Face (see below)
@@ -82,6 +83,16 @@ Milestone_3/
 └── report/
     └── IE7615_Milestone3_Report_Group7.pdf
 ```
+
+## The EYE v3.5
+
+`app/m2_eye_app_v35.py` is the latest version of The EYE. It keeps everything in v3 and adds a **COMPOUND** view:
+the other strong models (boost2, the Milestone 2 model, a YOLOv8-s) and, on grids, the Milestone 1 classifier vote on
+every box of the selected model. With COMPOUND on, the pupil splits into one pupil per model, each with its own score
+ring and boxes; hovering an object highlights it in every pupil. It explains only: it never changes the selected
+model's answer or score. Combining the models into one answer was tested on validation under a sealed rule and did
+not pass, so it stays a view. The Milestone 1 classifier is optional (its weights are looked for in
+`milestone1_outputs_v2/`, or set `M2_CLS_WEIGHTS`).
 
 ## Reproducibility and safeguards
 
@@ -112,14 +123,14 @@ python scripts/m2_boost.py masks                    # SAM 2 cut-outs (optional)
 M2_IMGSZ=1280 M2_BATCH=4 python scripts/m2_boost.py all                       # build -> train -> evaluate (boost)
 M2_BOOST_DIR=boost2 M2_IMGSZ=1600 M2_BATCH=2 python scripts/m2_boost.py all   # the second model (boost2)
 python scripts/m2_boost_val.py                      # selection by the fixed rule, thresholds, one look at tests
-python app/launch_eye.py                            # The EYE v3 at http://127.0.0.1:7862
+python app/launch_eye.py                            # The EYE v3.5 at http://127.0.0.1:7867
 ```
 
 ## Live demo
 
-**The EYE v3 (full app): https://leaves-ladies-reminder-becoming.trycloudflare.com**
+**The EYE (full app): https://leaves-ladies-reminder-becoming.trycloudflare.com**
 
-The complete EYE v3 runs on our laptop with its GPU and is shared through a Cloudflare quick tunnel (report
+The complete EYE runs on our laptop with its GPU and is shared through a Cloudflare quick tunnel (report
 Section 10.1). It has every feature: uploads, random grids, rotated grids, scattered and cut-out scenes, right/wrong
 scoring, the stress test and the inspect panels. The link works while the app and the tunnel are running; a quick
 tunnel's address changes each time it is restarted, so the current address is kept here.

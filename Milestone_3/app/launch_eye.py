@@ -1,10 +1,10 @@
 """
-launch_eye.py  -  patch absolute paths for THIS machine, then start The EYE v3.
+launch_eye.py  -  patch absolute paths for THIS machine, then start The EYE v3.5.
 
 Usage:
     python launch_eye.py
 
-Opens http://127.0.0.1:7862 in your browser.
+Opens http://127.0.0.1:7867 in your browser.
 Stop with Ctrl+C.
 """
 import json, os, subprocess, sys
@@ -22,7 +22,7 @@ def write_json(path, data):
 
 
 print("=" * 55)
-print("  The EYE v3 - Launcher")
+print("  The EYE v3.5 - Launcher")
 print("=" * 55)
 print("Patching weight paths for this machine ...")
 
@@ -55,7 +55,7 @@ if results_path.exists():
     write_json(results_path, r)
     print(f"  patched milestone2_outputs/detect/results.json ({len(m2_models)} models)")
 
-print("Done. Launching The EYE v3 at http://127.0.0.1:7862 ...")
+print("Done. Launching The EYE v3.5 at http://127.0.0.1:7867 ...")
 print("Stop with Ctrl+C")
 print("=" * 55)
 
@@ -63,6 +63,6 @@ env = os.environ.copy()
 env["M2_PROJECT_DIR"] = str(HERE)
 
 subprocess.run(
-    [sys.executable, str(HERE / "m2_eye_app_v3.py")],
+    [sys.executable, str(HERE / "m2_eye_app_v35.py")],
     env=env,
 )
