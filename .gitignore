@@ -19,3 +19,18 @@ images_224.npy
 __pycache__/
 .ipynb_checkpoints/
 .[assistant]/
+
+# THE EYE: never publish weights, keys, server state, deployment bundles, datasets or secrets
+*.pt
+*.onnx
+*.key
+*.pem
+id_*
+eye_counter.json
+eye_best_photos.json
+__pycache__/
+EYE_DEPLOY/
+EYE_DEPLOY.zip
+Dataset*/
+*.zip
+.env

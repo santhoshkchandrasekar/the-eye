@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IE7615 Group 7: the code journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --page:#f2f4f6; --ink:#1d2530; --ink2:#4a5664; --rule:#cfd6de; --card:#ffffff;
+  --m1:#185FA5; --m1f:#E6F1FB; --m2:#0F6E56; --m2f:#E1F5EE; --m3:#534AB7; --m3f:#EEEDFE; --off:#888780; --offf:#F1EFE8;
+  --sel:#BA7517; color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#14181d; --ink:#e6eaef; --ink2:#a9b4c0; --rule:#2c343d; --card:#1b2027;
+  --m1:#85B7EB; --m1f:#0C447C; --m2:#5DCAA5; --m2f:#085041; --m3:#AFA9EC; --m3f:#3C3489; --off:#B4B2A9; --offf:#444441; --sel:#EF9F27; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --page:#14181d; --ink:#e6eaef; --ink2:#a9b4c0; --rule:#2c343d; --card:#1b2027;
+  --m1:#85B7EB; --m1f:#0C447C; --m2:#5DCAA5; --m2f:#085041; --m3:#AFA9EC; --m3f:#3C3489; --off:#B4B2A9; --offf:#444441; --sel:#EF9F27; color-scheme:dark;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)} *{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 17px/1.55 var(--font)}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 48px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:28px;align-items:start}
+header{grid-column:1/-1}
+h1{font-size:30px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+.lede{color:var(--ink2);margin:0;max-width:70ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 0 0;color:var(--ink2);font-size:14px}
+.legend span{display:inline-flex;align-items:center;gap:7px} .legend i{width:12px;height:12px;border-radius:3px;border:1px solid}
+.journey{position:relative}
+.ms{position:relative;margin:0 0 26px;padding:16px 16px 6px 22px;border-radius:16px;background:var(--card);border:1px solid var(--rule)}
+.ms::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:4px;background:var(--c)}
+.ms h2{margin:0 0 2px;font-size:20px;color:var(--c)} .ms .sub{margin:0 0 14px;color:var(--ink2);font-size:15px}
+.step{position:relative;padding:0 0 14px 34px}
+.step::before{content:"";position:absolute;left:11px;top:30px;bottom:-2px;width:2px;background:var(--rule)}
+.step:last-child::before{display:none}
+.dot{position:absolute;left:4px;top:13px;width:16px;height:16px;border-radius:50%;background:var(--cf);border:2px solid var(--c)}
+.file{display:block;width:100%;text-align:left;cursor:pointer;background:var(--cf);color:var(--ink);border:1px solid var(--c);border-radius:12px;padding:10px 14px;font:inherit;transition:transform .12s ease,box-shadow .12s ease}
+.file:hover{transform:translateX(2px)} .file:focus-visible{outline:3px solid var(--sel);outline-offset:2px}
+.file[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sel)}
+.file .nm{font:600 15px var(--mono);word-break:break-all} .file .what{display:block;font-size:14.5px;color:var(--ink2);margin-top:2px}
+.runs{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.run{font:600 12px var(--mono);padding:2px 8px;border-radius:999px;border:1px solid var(--c);color:var(--c);background:var(--card)}
+.prod{font-size:13.5px;color:var(--ink2);margin-top:6px} .prod code{font-family:var(--mono);font-size:12.5px}
+.off{--c:var(--off);--cf:var(--offf)} .off .file{border-style:dashed}
+.m1{--c:var(--m1);--cf:var(--m1f)} .m2{--c:var(--m2);--cf:var(--m2f)} .m3{--c:var(--m3);--cf:var(--m3f)} .m4{--c:var(--m4,#ffd166);--cf:var(--m4f,rgba(255,209,102,.12))}
+.detail{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:18px 20px;max-height:calc(100vh - 32px);overflow:auto}
+.detail .tag{font:600 12px var(--mono);color:var(--c);text-transform:uppercase;letter-spacing:.08em}
+.detail h3{margin:4px 0 4px;font:600 18px var(--mono);word-break:break-all}
+.detail .what{color:var(--ink2);margin:0 0 10px}
+.detail h4{margin:16px 0 4px;font-size:15px;color:var(--c);text-transform:uppercase;letter-spacing:.06em}
+.detail ul{margin:0;padding-left:1.15em} .detail li{margin:3px 0;font-size:15.5px}
+.detail .empty{color:var(--ink2)}
+.detail .close{display:none}
+footer{grid-column:1/-1;color:var(--ink2);font-size:14px;border-top:1px solid var(--rule);padding-top:14px}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .detail{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:72vh;border-radius:18px 18px 0 0;margin:0;z-index:20;
+    padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .25s ease;box-shadow:0 -12px 30px rgba(0,0,0,.25)}
+  .detail.open{transform:none}
+  .detail .close{display:inline-block;float:right;font:inherit;font-size:14px;padding:4px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--page);color:var(--ink);cursor:pointer}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>The code journey: every file, every run</h1>
+<p class="lede">All the project code on record, in the order it was used, from Milestone 1's cleaning to Milestone 4's verification and the EYE v3.5. Each file shows the runs it produced. Click a file to see what it does, in plain words.</p>
+<p class="repo"><a href="https://github.com/tanmayi123/Discriminative-Project-Deep-Learning" target="_blank" rel="noopener">View the code on GitHub ↗</a><span>tanmayi123 / Discriminative-Project-Deep-Learning</span></p>
+<div class="legend"><span><i style="background:var(--m1f);border-color:var(--m1)"></i>Milestone 1</span><span><i style="background:var(--m2f);border-color:var(--m2)"></i>Milestone 2</span><span><i style="background:var(--m3f);border-color:var(--m3)"></i>Milestone 3</span><span><i style="background:var(--m4f);border-color:var(--m4)"></i>Milestone 4</span><span><i style="background:var(--offf);border-color:var(--off);border-style:dashed"></i>prepared, not used</span></div>
+</header>
+<div class="journey" id="journey"></div>
+<aside class="detail" id="detail" aria-live="polite"><p class="empty">Click any file on the left to see its jobs.</p></aside>
+<footer>IE7615 Deep Learning · Group 7. Built from the project records, the reports and an AI coding assistant's read-outs of the files. Only files on record are shown; the Milestone 2 review tool, for example, is not listed because its file name is not recorded.</footer>
+</div>
+<script>
+const MS = [
+ { id: "m1", title: "Milestone 1 · clean, split, classify", sub: "One photo in, one object name out." },
+ { id: "m2", title: "Milestone 2 · boxes, detector, the EYE", sub: "Find and name every object in a grid." },
+ { id: "m3", title: "Milestone 3 · diagnose, re-label, rebuild, retrain, share", sub: "Make the detector robust to rotation, scenes and cut-outs." },
+ { id: "m4", title: "Milestone 4 · verify, combine, explain", sub: "Re-read every number, test a combination of the models, finish the EYE." }
+];
+const F = [
+ { ms: "m1", name: "Milestone1_Expert_CNN_Study_LOCAL.ipynb", what: "Cleaning, the split and the Milestone 1 classifier",
+   produces: "split.csv · clean_dataset.csv · excluded_background_only.csv",
+   jobs: {
+    "Data": ["Reads the 7,343 raw files of 73 objects.",
+             "Removes background-only photos by file name: _bg_ or BG followed by digits, in any case. 385 removed (372 _bg_, 7 sunglasses_bg_, 6 _BG###).",
+             "A model-based background detector (CLIP) exists in the notebook but was switched off.",
+             "Removes 16 exact duplicates: 6,942 photos remain."],
+    "Split": ["Splits the 6,942 photos 70/15/15, balanced per object, with a fixed seed (42): 4,859 training, 1,041 validation, 1,042 test.",
+              "Saves the split, so every later milestone uses the same groups."],
+    "Training and testing": ["Trains and tests the Milestone 1 CNN classifier.",
+                             "Keeps the 385 background photos aside for a test of whether the classifier relies on backgrounds."],
+    "Known gap": ["Five OBJ004 photos showing only background had no _bg_ tag, so this step kept them; Milestone 2 removed them by eye."]
+   } },
+ { ms: "m2", name: "M2_Boxes.ipynb", what: "Makes a box for every photo", runs: ["YOLO helper"],
+   produces: "boxes_master.csv (6,936 rows, one per photo, with a status)",
+   jobs: {
+    "Data": ["Leaves out 6 photos that are not photos of their object: a phone screenshot (OBJ054_017) and five OBJ004 background shots.",
+             "Works on the remaining 6,936 photos, keeping Milestone 1's split."],
+    "Box drawer 1: OWLv2 text prompt": ["Asks OWLv2 for one box per photo from the object's name (for example \"a photo of a toy car\"): all 6,936 in about 17 minutes, 16× faster after a GPU-memory fix.",
+                                       "5,570 boxes are usable (80.3%)."],
+    "Box drawer 2: OWLv2 image prompt": ["Shows OWLv2 3 example crops per object (hand-drawn for 7 objects) and asks it to find something similar.",
+                                        "Its boxes often covered floor or bed, so it only counts as one vote."],
+    "Training: the YOLO helper": ["Trains a YOLO26-s helper on 3,915 usable text-prompt boxes from training photos only, for 40 epochs.",
+                                  "Validation mAP@0.5 = 0.950 on single photos.",
+                                  "Then lets the helper box every photo, as an independent second opinion."],
+    "The vote": ["Compares the three boxes of each photo: all three agree = strong (3,172), two agree = auto (2,935), otherwise review (829).",
+                 "Accepts strong and auto boxes (6,107)."],
+    "Outputs": ["Writes every photo's box and status to boxes_master.csv: verified, fixed, unreviewed_auto, unreviewed_none or pending_fix.",
+                "Final state: 1,968 boxes checked by a person (verified 1,343 + fixed 625), 4,660 accepted unchecked, 308 without a usable box (unreviewed_none 304 + pending_fix 4)."]
+   } },
+ { ms: "m2", name: "M2_Detect.ipynb", what: "Builds the grids, trains, picks and tests the detector", runs: ["Run 1", "Run 2", "Run 3", "Run 4", "Run 5 ★"],
+   produces: "dataset (images, YOLO label files, dataset YAML) · runs\\yolo26s_ft2\\weights\\best.pt · results.json",
+   jobs: {
+    "Data": ["Places 224-pixel photos into grids from 2x2 to 5x5 and moves each box with its photo.",
+             "Writes the images, one YOLO label file per image and the dataset file with the 73 class names.",
+             "Builds 1,500 training images once and keeps them fixed: Runs 1–4 grids only (~300 per size); Run 5 85% grids (half with look-alikes side by side) and 15% single photos. Which exact set Runs 1–2 used is still an open question.",
+             "Validation: 68 grids, 972 objects. Test: 72 grids (16 of 2x2, 14 each of 3x3, 4x4, 5x4, 5x5), plus 84 images of other input types."],
+    "Augmentation": ["Baked into the files: about 20% of training images blurred, low-resolution, JPEG-compressed or dark.",
+                     "On the fly, every time an image is loaded (Ultralytics): flips, colour and brightness, mosaic, small zoom and shift."],
+    "Training": ["Run 1: YOLOv8-s from COCO, stopped early after 56 epochs. Run 2: YOLO26-s from COCO, 60 epochs.",
+                 "Settings: 1,120 px input, batch 4, cosine learning rate, mosaic 0.5; Runs 1–2 stop after 12 flat epochs, the fine-tunes after 6, with learning rate 0.002 and no warm-up.",
+                 "After the sneaker rule: Run 3 (Run 1 + 15 epochs) and Run 4 (Run 2 + 15 epochs).",
+                 "After four more label rules, single photos and look-alike grids: Run 5 (Run 4 + 15 epochs)."],
+    "Validation": ["Scores each run on validation after every epoch and keeps the best epoch (best.pt).",
+                   "Chooses the winner by a fixed rule: highest validation mAP@0.5:0.95. Run 5 wins (0.930).",
+                   "Chooses the settings on validation: confidence 0.10, one box per 224-pixel cell, small images at natural size."],
+    "Testing": ["Tests the chosen model once: mAP@0.5 0.947, precision 0.931, recall 0.918, single photos 14 of 14."]
+   } },
+ { ms: "m2", name: "m2_cross_eval.py", what: "Cross-evaluation of the teammates' pipelines", runs: ["runs A–C vs Selected"],
+   jobs: {
+    "What it does": ["Scores the teammates' alternative pipelines (runs A–C) and the selected model on the same human-checked test set, so all are judged on identical truth.",
+                     "Uses masking so that differences in what each pipeline labelled do not distort the comparison."],
+    "Note": ["The teammates' pipelines are not covered in the lessons; the detailed results are in the Milestone 2 report."]
+   } },
+ { ms: "m2", name: "m2_demo_app.py", what: "A Gradio demo app of the detector",
+   jobs: {
+    "What it is": ["A demo app for the Milestone 2 detector, built with Gradio, in the MILESTONE 2 folder."],
+    "Note": ["Its exact features are not on record; the project's explorer is the EYE (next)."]
+   } },
+ { ms: "m2", name: "m2_eye_app.py", what: "The EYE (Milestone 2), on port 7860",
+   jobs: {
+    "What it is": ["One Python file that runs a small web server and the page in the browser."],
+    "Data": ["Builds random grids from held-out test photos whose boxes were all checked by a person.",
+             "Accepts uploaded photos."],
+    "Detection": ["Loads the selected model (Run 5) and uses exactly the evaluation's rules: threshold 0.10, one box per cell, IoU ≥ 0.5."],
+    "Explaining": ["Labels every object correct, box off, wrong ID or missed.",
+                   "Looks at weaker candidates too, so it can say an object was seen below the threshold (for example 0.0996) or not seen at all."],
+    "Other jobs": ["Stress test over many grids, threshold sweep, Inspect view, a large view with its own controls, PNG/CSV/JSON downloads, snapshot, hover titles, light/dark and Calm mode.",
+                   "\"How was I built?\": the project told as a building site in ten stations."]
+   } },
+ { ms: "m3", name: "m2_diagnose.py", what: "Measures exactly what was wrong, on validation only",
+   produces: "diagnosis.json · diagnosis.md",
+   jobs: {
+    "Data": ["Uses only the 68 validation grids (972 objects); the test set stays untouched.", "Runs the model in the same way as the validated Milestone 2 settings (read from results.json)."],
+    "Testing the old model": ["Scores the Milestone 2 model on upright grids: recall 0.961, precision 0.972, 5 wrong IDs.",
+                              "Turns every validation photo 90°, 180° and 270°: recall falls to 0.771, 0.830 and 0.762; wrong IDs rise to 70, 30 and 70.",
+                              "Gives every upright miss a cause: box placed off 11, not seen 10, below the threshold 8, wrong ID 5, removed by the cell rule 4."],
+    "Cheap fixes, tested first": ["Other thresholds, filling empty cells, test-time augmentation, and a larger input (1,280 or 1,600 px) without retraining.",
+                                  "None helped enough, so all three were rejected."],
+    "Outcome": ["Decisions: retrain at 1,280 px, teach rotation, and have a person check every box."]
+   } },
+ { ms: "m3", name: "m2_label_check.py", what: "Gets every usable box checked by a person (two passes)", runs: ["Pass 1", "Pass 2"],
+   produces: "decisions.csv · boxes_master_checked.csv · extra_boxes.csv · summary.json · model_opinion.json · near_duplicates.json",
+   jobs: {
+    "prepare": ["Runs a model over all 6,936 photos as a second opinion: the Milestone 2 model for pass 1, boost for pass 2.",
+                "Sorts photos into review queues: suspects, the never-checked sweep, box size, the five rule objects, left out, second objects.",
+                "Finds near-identical photos across splits with perceptual hashes: 183 pairs."],
+    "review": ["Opens a browser page on port 7870 with one tab per queue; every click is saved at once.",
+               "Applies one rule to all objects: box the whole object, every visible part, tight to its edges.",
+               "For a real duplicate, drops the training or validation copy and keeps the test photo."],
+    "apply": ["Writes the checked boxes to a new file, boxes_master_checked.csv, with the statuses verified, fixed, excluded_human or excluded_duplicate; the original boxes_master.csv is never modified."],
+    "merge": ["Combines decision files from several reviewers."],
+    "Result": ["6,881 boxes, every one checked by a person; 14 photos excluded by a person; 41 near-duplicates removed; 16 second-object boxes.",
+               "Pass 2: 200 decisions, 41 boxes changed (17 test, 12 validation, 12 training)."]
+   } },
+ { ms: "m3", name: "m2_boost.py", what: "Builds the new data, trains boost and boost2, evaluates", runs: ["Run 6 boost", "Run 7 boost2"],
+   produces: "masks · cache224 · dataset · tests · runs\\boost and boost2 · start_weights.pt · build.json · train.json · evaluation.json / .md · previews",
+   jobs: {
+    "build: training data": ["3,000 training images: grid 1,264, scatter 990, cut-out 597, empty 149.",
+                             "Grids with photos turned 90°, 180° or 270° (exact boxes), small tilts of ±10° (box re-fitted), whole grids rotated, ~15% single photos, half with look-alike groups.",
+                             "Scatter: photos at random sizes and angles on real backgrounds (the 385 background photos) or synthetic ones.",
+                             "Cut-outs: objects cut out with SAM, using the checked box as the prompt; the box stays the label. A quality gate kept 6,752 masks and rejected 133.",
+                             "Empty backgrounds teach \"nothing here\"."],
+    "build: augmentation": ["Low light, colour casts, blur, JPEG and noise.",
+                            "More examples of look-alikes and the diagnosis's weakest objects.", "Second objects found in the label check are included as extra boxes.",
+                            "Everything built at the 1,120-pixel scale and then scaled, the same way for training, validation and the EYE."],
+    "build: validation and tests": ["Validation: 292 images (corrected grids, rotated copies, scenes on validation backgrounds).",
+                                    "Tests: normal 72, rotated 216, scattered 104, cut-out 104, single photos ~1,040, all on the checked truth and unseen test backgrounds."],
+    "train": ["Run 6 boost: fine-tunes a copy of Run 5 at 1,280 px, batch 4, 30 epochs, about 2 hours.",
+              "Run 7 boost2: the same at 1,600 px, batch 2, 30 epochs, on the pass-2 labels; 3.47 hours in total (a batch-4 attempt was abandoned in its first epoch).",
+              "Gentle settings: learning rate 0.002 (cosine), patience 10, mosaic off, flips and light zoom, shift and colour changes.",
+              "Can resume an interrupted run; never overwrites a finished one."],
+    "evaluate": ["Scores the Milestone 2 model and the new models on every test set with the same checked truth.",
+                 "Writes only into the M2 extra folder and trains from a copy of the selected weights (start_weights.pt), so the submitted Milestone 2 files stay untouched; their fingerprints (protected_hashes_before.txt) were re-checked after every phase and always matched."]
+   } },
+ { ms: "m3", name: "m2_boost_val.py", what: "Chooses the final model and its settings by the sealed rule", runs: ["choice: boost ★"],
+   produces: "selection.json · selection.md · selected_model.json",
+   jobs: {
+    "The rule": ["Refuses to decide unless selection_rule.txt still matches the fingerprint recorded before any boost2 result."],
+    "Validation": ["Compares boost and boost2 on the same 292 validation images, each at its own input size: about 0.886 against 0.878.",
+                   "Paired bootstrap, 1,000 resamples: 95% of differences between −0.0142 and −0.0024, so boost really is better. boost stays.",
+                   "Chooses the thresholds: 0.10 for grids, 0.35 for scenes, adopted because F1 rose by more than 0.003.",
+                   "For scenes, removes overlapping duplicate boxes whatever object they name."],
+    "Testing": ["One look at every test set with the final settings, for example normal-grid recall 0.949, rotated 0.922, cut-outs 0.881."]
+   } },
+ { ms: "m3", name: "m2_eye_app_v2.py → v3 → v3.3", what: "The EYE with the improved models (ports 7861 to 7865)",
+   jobs: {
+    "v2 (port 7861)": ["The first improved model, boost, next to the Milestone 2 model; later the fallback with the first improved model."],
+    "v3 (port 7862)": ["The selected model with the validated settings: 0.10 for grids, 0.35 for scenes.", "Rotated grids and scenes, a box-tightness view and the 12-station \"How was I built?\" journey.", "The version behind the shared link."],
+    "v3.1 to v3.3": ["A calmer first screen, and a close button on every window.",
+                     "On DETECT the eye grows and the camera moves into the pupil; the score appears on the left and the results on the right.",
+                     "Sound effects (generated in the browser), the name of the object for single photos, and fixes found in the audit."],
+    "Started by": ["Launchers such as start_eye_v3.bat and start_eye_v31.bat, which point the EYE at the project copy in Milestone 3\\M3 HOST; started without it, the EYE found no models after the folder restructure."]
+   } },
+ { ms: "m3", name: "fix_paths.py", what: "Updates file paths after the folder restructure",
+   jobs: {
+    "What it does": ["Created by an AI coding assistant after the project folders were reorganised into Milestone 2 and Milestone 3, to update paths inside the copies that needed it."],
+    "Why it matters": ["Copies may therefore differ from the originals, so later updates were checked before overwriting anything."]
+   } },
+ { ms: "m3", name: "start_share.ps1 · stop_share.ps1 · restore_power.ps1", what: "Shares the EYE by link through a Cloudflare tunnel (PowerShell)",
+   jobs: {
+    "What they do": ["Start or stop a Cloudflare tunnel from the laptop, so anyone with the link can use the EYE.",
+                     "Record the laptop's power settings (power_before.txt), keep it awake while sharing, and put exactly those settings back afterwards (restore_power.ps1).",
+                     "Reuse a running EYE if one answers; otherwise start one.",
+                     "Limit the stress test to 100 grids for visitors (M2_STRESS_MAX=100)."],
+    "Why this way": ["Free, uses the laptop's GPU and needs no account; the other hosts were too costly, temporary or too small."]
+   } },
+ { ms: "m3", off: true, name: "make_space_bundle.py · upload_space.py", what: "Prepared for a Hugging Face Space; not used",
+   jobs: {
+    "What they do": ["Package the EYE and its data into a bundle and upload it to a Hugging Face Space."],
+    "Why not used": ["Hugging Face Docker Spaces need a paid plan, so the full EYE is shared through the Cloudflare tunnel instead.", "A lightweight free-tier replica on Hugging Face was set up separately, with reduced capabilities."]
+   } },
+ { ms: "m4", name: "measure2.py", what: "The second measurement run for the final report",
+   produces: "M4_MEASURE2.md · M4_MEASURE2.json · item1_ci.csv … item8 files",
+   jobs: {
+    "What it measures": ["95% bootstrap intervals and paired tests for every final number (item 1).",
+                         "How much correcting the test labels with boost's help favoured boost: recall +3.2 points on the untouched answer key, +3.8 on the corrected one (item 2).",
+                         "Naming on the same 1,040 single photos: classifier 99.5%, boost 97.2%, Milestone 2 model 94.7% (item 3).",
+                         "Degraded images, where boost is worse (mAP@0.5 0.393 vs 0.465), and empty backgrounds (boxes on 35% vs 14%) (items 4 and 6).",
+                         "Per-object changes, the stress test reproduced exactly, speed and size (items 5, 7 and 8)."],
+    "How": ["Read-only: the same weights, test sets and scoring code as Milestone 3; every reproduction matched the saved results to four decimals.",
+            "Written and run by an AI coding assistant under our instructions; a listing of all project files was identical before and after."]
+   } },
+ { ms: "m4", name: "compound.py · make_report.py", what: "COMPOUND: can the best models be combined?", runs: ["B0–B4", "C1–C7"],
+   produces: "COMPOUND_RESULTS.md · COMPOUND_RESULTS.json · decision_table.csv · PROVENANCE.md",
+   jobs: {
+    "Design": ["Members: boost, boost2, the Milestone 2 model, Run 3 (YOLOv8-s) and the Milestone 1 classifier; predictions cached on validation only.",
+               "Seven cumulative stages (orientation, fusion, calibration, classifier naming, gap filling, quality weighting, an arbiter) against five baselines; every setting chosen by 5-fold cross-validation."],
+    "The sealed rule": ["Fully correct +2 points, no kind of image losing more than 0.5 recall points, no extra false boxes; its SHA-256 (4147CFB9…3721) recorded before any test prediction."],
+    "Outcome": ["No candidate eligible: fully correct +6.9 points, but cut-out recall −2.2 and more boxes on empty backgrounds. boost stays; COMPOUND became a view in the EYE."],
+    "Why two files": ["make_report.py writes the report from the results, so compound.py stays byte-identical to the version that produced them."]
+   } },
+ { ms: "m4", name: "m2_eye_app_v34.py → v3.5", what: "The EYE with COMPOUND (ports 7866 and 7867)",
+   jobs: {
+    "What it adds": ["COMPOUND: every model shown on the same image, judged against the truth like the answer; it explains and never changes the answer or the score.",
+                     "How was I built? with four tabs: In a nut-bolt, Model journey (including the team pipelines), Project lessons and Code journey."],
+    "Started by": ["start_eye_v34.bat and start_eye_v35.bat, which point the EYE at Milestone 3\\M3 HOST."]
+   } }
+];
+const $ = s => document.querySelector(s);
+const J = $("#journey"), D = $("#detail");
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+MS.forEach(m => {
+  const sec = document.createElement("section"); sec.className = "ms " + m.id;
+  sec.innerHTML = `<h2>${esc(m.title)}</h2><p class="sub">${esc(m.sub)}</p>`;
+  F.filter(f => f.ms === m.id).forEach(f => {
+    const i = F.indexOf(f), st = document.createElement("div"); st.className = "step" + (f.off ? " off" : "");
+    st.innerHTML = `<span class="dot"></span><button class="file" type="button" data-i="${i}" aria-pressed="false" aria-controls="detail">
+      <span class="nm">${esc(f.name)}</span><span class="what">${esc(f.what)}</span>
+      ${f.runs ? `<span class="runs">${f.runs.map(r => `<span class="run">${esc(r)}</span>`).join("")}</span>` : ""}
+      ${f.produces ? `<span class="prod">produces: <code>${esc(f.produces)}</code></span>` : ""}</button>`;
+    sec.appendChild(st);
+  });
+  J.appendChild(sec);
+});
+function show(i, focusPanel) {
+  const f = F[i], m = MS.find(x => x.id === f.ms);
+  document.querySelectorAll(".file").forEach(b => b.setAttribute("aria-pressed", b.dataset.i == i));
+  D.className = "detail open " + f.ms + (f.off ? " off" : "");
+  D.innerHTML = `<button class="close" type="button">Close</button><div class="tag">${esc(m.title.split(" · ")[0])}${f.off ? " · not used" : ""}</div>
+    <h3>${esc(f.name)}</h3><p class="what">${esc(f.what)}</p>
+    ${f.runs ? `<div class="runs">${f.runs.map(r => `<span class="run">${esc(r)}</span>`).join("")}</div>` : ""}
+    ${Object.entries(f.jobs).map(([h, items]) => `<h4>${esc(h)}</h4><ul>${items.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`).join("")}`;
+  D.querySelector(".close").onclick = () => { D.classList.remove("open"); };
+  D.scrollTop = 0;
+  if (focusPanel && matchMedia("(max-width: 900px)").matches) D.focus?.();
+}
+J.addEventListener("click", e => { const b = e.target.closest(".file"); if (b) show(+b.dataset.i, true); });
+addEventListener("keydown", e => { if (e.key === "Escape") D.classList.remove("open"); });
+if (matchMedia("(min-width: 901px)").matches) show(0, false);
+</script>
+</body>
+</html>

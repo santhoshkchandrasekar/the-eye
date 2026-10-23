@@ -1,0 +1,22 @@
+# The EYE as a service: starts on boot, restarts 5 s after any crash. Installed by setup.sh.
+[Unit]
+Description=The EYE (Explainable YOLO Explorer)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/eye
+Environment=M2_PUBLIC=1
+Environment=M2_PORT=7867
+Environment=M2_HOST=127.0.0.1
+Environment=M2_NO_BROWSER=1
+Environment=M2_PROJECT_DIR=/home/ubuntu/eye/project
+Environment=M2_COUNTER=/home/ubuntu/eye/eye_counter.json
+Environment=OMP_NUM_THREADS=2
+ExecStart=/home/ubuntu/eye/.venv/bin/python m2_eye_app_v35.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

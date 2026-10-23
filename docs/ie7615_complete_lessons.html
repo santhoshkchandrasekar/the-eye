@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IE7615 Group 7: the complete project, step by step</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --page:#f2f4f6; --ink:#1d2530; --ink2:#4a5664; --rule:#cfd6de; --card:#ffffff; --link:#185FA5;
+  --gf:#F1EFE8; --gs:#5F5E5A; --gt:#444441; --gu:#5F5E5A;
+  --tf:#E1F5EE; --ts:#0F6E56; --tt:#085041; --tu:#0F6E56;
+  --pf:#EEEDFE; --ps:#534AB7; --pt:#3C3489; --pu:#534AB7;
+  --line:#73726c; color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page:#14181d; --ink:#e6eaef; --ink2:#a9b4c0; --rule:#2c343d; --card:#1b2027; --link:#85B7EB;
+    --gf:#444441; --gs:#B4B2A9; --gt:#F1EFE8; --gu:#D3D1C7;
+    --tf:#085041; --ts:#5DCAA5; --tt:#E1F5EE; --tu:#9FE1CB;
+    --pf:#3C3489; --ps:#AFA9EC; --pt:#EEEDFE; --pu:#CECBF6;
+    --line:#9c9a92; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --page:#14181d; --ink:#e6eaef; --ink2:#a9b4c0; --rule:#2c343d; --card:#1b2027; --link:#85B7EB;
+  --gf:#444441; --gs:#B4B2A9; --gt:#F1EFE8; --gu:#D3D1C7;
+  --tf:#085041; --ts:#5DCAA5; --tt:#E1F5EE; --tu:#9FE1CB;
+  --pf:#3C3489; --ps:#AFA9EC; --pt:#EEEDFE; --pu:#CECBF6;
+  --line:#9c9a92; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 17px/1.6 var(--font)}
+main{max-width:780px;margin:0 auto;padding:40px 20px 64px}
+h1{font-size:30px;line-height:1.2;margin:0 0 10px;font-weight:700;letter-spacing:-.01em}
+.lede{color:var(--ink2);margin:0 0 28px;max-width:64ch}
+h2{font-size:20px;margin:40px 0 10px;font-weight:700}
+p,li{max-width:68ch} ul{padding-left:1.2em} li{margin:4px 0}
+a{color:var(--link)}
+.figure{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:14px;overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:580px;height:auto}
+.key{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 2px 0;color:var(--ink2);font-size:15px}
+.key span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:4px;border:1px solid}
+.sw.p{background:var(--pf);border-color:var(--ps)} .sw.t{background:var(--tf);border-color:var(--ts)} .sw.g{background:var(--gf);border-color:var(--gs)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{color:var(--ink2);font-weight:700} td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.sel td{font-weight:700}
+footer{margin-top:44px;color:var(--ink2);font-size:14px;border-top:1px solid var(--rule);padding-top:14px}
+svg .th{font:700 14px var(--font)} svg .ts{font:400 12px var(--font)}
+svg .c-gray>rect{fill:var(--gf);stroke:var(--gs)} svg .c-gray>.th{fill:var(--gt)} svg .c-gray>.ts{fill:var(--gu)}
+svg .c-teal>rect{fill:var(--tf);stroke:var(--ts)} svg .c-teal>.th{fill:var(--tt)} svg .c-teal>.ts{fill:var(--tu)}
+svg .c-purple>rect{fill:var(--pf);stroke:var(--ps)} svg .c-purple>.th{fill:var(--pt)} svg .c-purple>.ts{fill:var(--pu)}
+svg .arr,svg .ln{fill:none;stroke:var(--line);stroke-width:1.5} svg marker path{stroke:var(--line)}
+svg .tl{font:400 12px var(--font);fill:var(--ink2)} svg .tb{font:700 13px var(--font);fill:var(--ink)}
+svg .truebox{fill:none;stroke:var(--ts);stroke-width:2} svg .predbox{fill:none;stroke:var(--ps);stroke-width:2;stroke-dasharray:6 4}
+svg .shared{fill:var(--pf);opacity:.9} svg .panel{fill:var(--card);stroke:var(--rule)}
+svg .bar-ok{fill:var(--tf);stroke:var(--ts)} svg .bar-bad{fill:var(--pf);stroke:var(--ps)} svg .bar-g{fill:var(--gf);stroke:var(--gs)}
+
+h1.part{font-size:24px;margin:56px 0 4px;padding-top:18px;border-top:2px solid var(--ts);color:var(--tt)}
+h2{font-size:24px;margin:52px 0 10px;scroll-margin-top:16px} h2 .no,.toc .no{display:inline-block;min-width:2.2em;color:var(--ts);font-variant-numeric:tabular-nums}
+h3{font-size:19px;margin:30px 0 8px}
+section{border-top:1px solid var(--rule);margin-top:28px}
+.toc{columns:2;column-gap:28px;padding-left:0;list-style:none;margin:10px 0 0}
+.toc li{break-inside:avoid;margin:3px 0} .toc li.tp{font-weight:700;margin-top:10px;color:var(--ink2)} .toc a{text-decoration:none;color:var(--ink)} .toc a:hover{color:var(--ts)}
+@media (max-width:560px){.toc{columns:1}}
+p.top{font-size:14px;margin-top:18px} p.top a{color:var(--ink2)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ts);background:var(--card);border-radius:0 10px 10px 0}
+.note{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;color:var(--ink2);font-size:15px}
+.seq{list-style:none;padding:0;margin:12px 2px 0;font-size:15px;color:var(--ink2)} .seq li{margin:4px 0} .seq b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-right:8px;border-radius:50%;background:var(--sel,#BA7517);color:#fff;font-size:12px}
+</style>
+</head>
+<body><main><h1>IE7615 Group 7: the complete project, step by step</h1>
+<p class="lede">Every lesson of the project in one place, Milestone 1 to 4: how 6,942 photos were cleaned and a classifier chosen for robustness, how about 7,000 photos got verified boxes, how the detector was trained, measured and chosen, what it gets wrong, how Milestone 3 diagnosed, re-labelled, rebuilt and retrained it, and how Milestone 4 checked every number and tested a combination of the models. Every number comes from the reports, the result files or the project records; numbers marked * are derived by subtraction.</p>
+<div class="note"><b>How to use this page.</b> Read top to bottom, or jump from the contents. Diagrams scroll sideways on narrow screens. Details first held back during an audit were later confirmed against the project files and restored; open questions are listed where they arise.</div>
+<h3 id="contents">Contents</h3>
+<ol class="toc"><li class="tp"><a href="#milestone-1">Milestone 1</a></li><li><a href="#s1"><span class="no">1</span>The data and the one split</a></li><li><a href="#s2"><span class="no">2</span>Five networks, one recipe</a></li><li><a href="#s3"><span class="no">3</span>Choosing for robustness</a></li><li><a href="#s4"><span class="no">4</span>What the classifier looks at</a></li><li class="tp"><a href="#milestone-2">Milestone 2</a></li><li><a href="#s5"><span class="no">5</span>The problem</a></li><li><a href="#s6"><span class="no">6</span>Making the boxes</a></li><li><a href="#s7"><span class="no">7</span>People checking, and the complete box flow</a></li><li><a href="#s8"><span class="no">8</span>The label audit</a></li><li><a href="#s9"><span class="no">9</span>Building the grids</a></li><li><a href="#s10"><span class="no">10</span>Training, validation and test</a></li><li><a href="#s11"><span class="no">11</span>The five model runs</a></li><li><a href="#s12"><span class="no">12</span>How YOLO turns an image into boxes</a></li><li><a href="#s13"><span class="no">13</span>Measuring a detector</a></li><li><a href="#s14"><span class="no">14</span>What the model gets wrong, and why</a></li><li><a href="#s15"><span class="no">15</span>The EYE</a></li><li class="tp"><a href="#milestone-3">Milestone 3</a></li><li><a href="#s16"><span class="no">16</span>The diagnosis</a></li><li><a href="#s17"><span class="no">17</span>The label check</a></li><li><a href="#s18"><span class="no">18</span>The new training data</a></li><li><a href="#s19"><span class="no">19</span>Training boost and boost2</a></li><li><a href="#s20"><span class="no">20</span>Testing and choosing</a></li><li><a href="#s21"><span class="no">21</span>Why training stopped</a></li><li class="tp"><a href="#milestone-4">Milestone 4</a></li><li><a href="#s22"><span class="no">22</span>Checking our own numbers</a></li><li><a href="#s23"><span class="no">23</span>COMPOUND: combining the best models</a></li><li><a href="#s24"><span class="no">24</span>What the whole project taught</a></li></ol><h1 class="part" id="milestone-1">Milestone 1</h1><section id="s1"><h2><span class="no">1</span>The data and the one split</h2><p class="lede">Where the 6,942 photos came from, how they were cleaned, and why the split was made once, before anything else, and never changed.</p>
+<h3>1. The dataset</h3><p>The course dataset has 7,343 image files in 73 object folders. Each object was photographed about a hundred times by one student, mostly in their own rooms. That makes the photos realistic, but it also builds in the dataset's main bias: <b>an object and its background travel together</b>, so a model can learn the room instead of the object. The project measured this in every milestone.</p><h3>2. Cleaning, with two simple rules</h3><div class="figure" role="img" aria-label="From 7,343 files to the three splits"><svg viewBox="0 0 680 404" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowm1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><g class="c-gray"><rect x="190" y="14" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="34" text-anchor="middle" dominant-baseline="central">7,343 image files</text><text class="ts" x="340.0" y="53" text-anchor="middle" dominant-baseline="central">73 object folders, 100 to 113 files each</text></g><path d="M340 70 L340 92" class="arr" marker-end="url(#arrowm1)"/><g class="c-gray"><rect x="190" y="94" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="114" text-anchor="middle" dominant-baseline="central">−385 background-only photos</text><text class="ts" x="340.0" y="133" text-anchor="middle" dominant-baseline="central">removed by file name: _bg_ or BG + digits</text></g><path d="M340 150 L340 172" class="arr" marker-end="url(#arrowm1)"/><g class="c-gray"><rect x="190" y="174" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="194" text-anchor="middle" dominant-baseline="central">−16 exact duplicates</text><text class="ts" x="340.0" y="213" text-anchor="middle" dominant-baseline="central">MD5 hash of each file's bytes</text></g><path d="M340 230 L340 252" class="arr" marker-end="url(#arrowm1)"/><g class="c-teal"><rect x="190" y="254" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="274" text-anchor="middle" dominant-baseline="central">6,942 photos</text><text class="ts" x="340.0" y="293" text-anchor="middle" dominant-baseline="central">89 to 106 per object (median 95)</text></g><path d="M340 310 L340 322 L120 322 L120 336" class="arr" marker-end="url(#arrowm1)"/><path d="M340 310 L340 336" class="arr" marker-end="url(#arrowm1)"/><path d="M340 310 L340 322 L560 322 L560 336" class="arr" marker-end="url(#arrowm1)"/><g class="c-purple"><rect x="40" y="338" width="160" height="56" rx="8" stroke-width="0.5"/><text class="th" x="120.0" y="358" text-anchor="middle" dominant-baseline="central">4,859 training</text><text class="ts" x="120.0" y="377" text-anchor="middle" dominant-baseline="central">70%</text></g><g class="c-purple"><rect x="260" y="338" width="160" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="358" text-anchor="middle" dominant-baseline="central">1,041 validation</text><text class="ts" x="340.0" y="377" text-anchor="middle" dominant-baseline="central">15%</text></g><g class="c-purple"><rect x="480" y="338" width="160" height="56" rx="8" stroke-width="0.5"/><text class="th" x="560.0" y="358" text-anchor="middle" dominant-baseline="central">1,042 test</text><text class="ts" x="560.0" y="377" text-anchor="middle" dominant-baseline="central">15%</text></g></svg></div><ul><li><b>Background-only photos</b> (the empty room) were removed by file name: 385 of them. Untagged ones stayed: five OBJ004 photos show only the room, and Milestone 2 removed them by eye.</li><li><b>Exact duplicates</b> were found by comparing file bytes (MD5): 16 copies removed. A re-saved copy or a burst shot is not caught this way; 99 test photos have a near-twin in training, which is why Milestone 1 also reports a <b>hard subset</b> of the 943 test photos without one.</li></ul><h3>3. One split, made first</h3><p>The 6,942 photos were split 70/15/15, balanced per object, with a fixed seed (42), so the shuffle is identical whenever it is rerun. The split was made <b>before any box or model existed</b> and kept for the whole project: a test photo in Milestone 1 is still a test photo in Milestone 4. That single decision is what makes every later comparison fair.</p><h3>4. Are the folder labels right?</h3><p>A logistic regression on frozen ConvNeXt-Tiny features, cross-validated in five folds, agreed with the folder label for <b>98.3%</b> of photos in the fully logged run (97.9% in the submitted study): a high level for 73 classes, with no sign of systematically mislabelled folders.</p><div class="note">One photo is a phone screenshot with personal details. It was blurred in every figure, together with twelve images an automatic check flagged as possibly showing a phone screen, and later removed from all detection data.</div><p class="top"><a href="#contents">back to contents</a></p></section><section id="s2"><h2><span class="no">2</span>Five networks, one recipe</h2><p class="lede">Why five networks were trained the same way, what transfer learning means, and what the clean test accuracy did and did not show.</p>
+<h3>1. A fair comparison</h3><p>A custom VGG-style CNN with ten convolutional layers was trained from scratch and compared with four networks pretrained on ImageNet: ResNet-50, EfficientNet-B0, ConvNeXt-Tiny and DenseNet-121. All five used <b>one shared recipe</b>, so any difference reflects the architecture rather than a trick given to one model: AdamW, a new output layer learning 3 to 10 times faster than the pretrained layers, a warm-up then a cosine decay of the learning rate, label smoothing 0.1, class weights, mixed precision and early stopping on validation macro-F1.</p><h3>2. The results on 1,042 test photos</h3><div class="tablewrap"><table>
+<tr><th>Model</th><th class="n">Test accuracy (95% CI)</th><th class="n">Hard subset</th><th class="n">Errors</th><th class="n">Parameters</th></tr>
+<tr><td>A2 Custom CNN (scratch)</td><td class="n">89.06% (87.1–91.1)</td><td class="n">87.91%</td><td class="n">114</td><td class="n">3.41 M</td></tr><tr><td>C ResNet-50</td><td class="n">98.66% (98.0–99.3)</td><td class="n">98.52%</td><td class="n">14</td><td class="n">23.66 M</td></tr><tr><td>D EfficientNet-B0</td><td class="n">98.75% (98.1–99.3)</td><td class="n">98.62%</td><td class="n">13</td><td class="n">4.10 M</td></tr><tr class="sel"><td>E ConvNeXt-Tiny (selected)</td><td class="n">99.23% (98.7–99.7)</td><td class="n">99.15%</td><td class="n">8</td><td class="n">27.88 M</td></tr><tr><td>G DenseNet-121</td><td class="n">98.66% (97.9–99.3)</td><td class="n">98.52%</td><td class="n">14</td><td class="n">7.03 M</td></tr>
+</table></div><h3>3. Transfer learning decides first</h3><p>Every pretrained network beat the scratch CNN by about ten points. A network pretrained on ImageNet has already learned edges, textures and shapes from a million photos; training only has to teach it which combinations mean <i>this keyboard</i> or <i>that tissue box</i>. Like a trained chef learning a new recipe, it starts far ahead of someone who has never cooked.</p><h3>4. What clean accuracy could not decide</h3><p>Among the four pretrained models, the differences on clean photos lie inside each other's intervals, and McNemar's test (which compares two models on the same photos, using only the photos where exactly one is right) confirms that ConvNeXt-Tiny is <b>not</b> significantly better there. Choosing by clean accuracy would have been choosing by noise. The next lesson shows what decided instead.</p><div class="note">Augmentation also mattered. In the fully logged replication, the same ConvNeXt-Tiny with only basic augmentation lost 20 points on low-quality photos and 11 on small ones: evidence that the richer recipe was worth it.</div><p class="top"><a href="#contents">back to contents</a></p></section><section id="s3"><h2><span class="no">3</span>Choosing for robustness</h2><p class="lede">How a rule written before the test chose the model that holds up best when photos are small, cropped, hidden or poor.</p>
+<h3>1. Four ways real photos go wrong</h3><p>Each validation and test photo was also tested under four simulated problems: <b>small</b> (the object at half size on a blurred canvas), <b>cropped</b> (a 70% window), <b>occluded</b> (a grey box over a quarter of the image) and <b>low quality</b> (four times smaller, darker, heavily compressed).</p><h3>2. The rule, fixed in advance</h3><p>Keep the models within 0.5 points of the best validation F1, then choose the most robust on the <i>validation</i> versions of the four problems. The test set played no part in the choice.</p><h3>3. What it chose</h3><div class="figure" role="img" aria-label="Clean accuracy and mean accuracy under the four problems, per model"><svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg"><text class="tb" x="16" y="34">A2 Custom CNN</text><rect class="bar-g" x="200" y="20" width="297" height="18" rx="3"/><text class="tl" x="503" y="33">89.1%</text><rect class="bar-bad" x="200" y="42" width="129" height="18" rx="3"/><text class="tl" x="335" y="55">67.0%</text><text class="tb" x="16" y="88">C ResNet-50</text><rect class="bar-g" x="200" y="74" width="370" height="18" rx="3"/><text class="tl" x="576" y="87">98.7%</text><rect class="bar-bad" x="200" y="96" width="220" height="18" rx="3"/><text class="tl" x="426" y="109">79.0%</text><text class="tb" x="16" y="142">D EfficientNet-B0</text><rect class="bar-g" x="200" y="128" width="370" height="18" rx="3"/><text class="tl" x="576" y="141">98.8%</text><rect class="bar-bad" x="200" y="150" width="242" height="18" rx="3"/><text class="tl" x="448" y="163">81.8%</text><text class="tb" x="16" y="196">E ConvNeXt-Tiny</text><rect class="bar-g" x="200" y="182" width="374" height="18" rx="3"/><text class="tl" x="580" y="195">99.2%</text><rect class="bar-ok" x="200" y="204" width="264" height="18" rx="3"/><text class="tl" x="470" y="217">84.7%</text><text class="tb" x="16" y="250">G DenseNet-121</text><rect class="bar-g" x="200" y="236" width="370" height="18" rx="3"/><text class="tl" x="576" y="249">98.7%</text><rect class="bar-bad" x="200" y="258" width="179" height="18" rx="3"/><text class="tl" x="385" y="271">73.6%</text></svg></div><div class="key"><span><i class="sw g"></i>clean test accuracy</span><span><i class="sw p"></i>mean of the four problems (test)</span><span><i class="sw t"></i>the selected model</span></div><p>ConvNeXt-Tiny led on validation (83.98%) and, as the chart shows, on test too: the most robust model under every problem. <b>Low-quality photos were the hardest condition for every model</b> (best 51.7%), a weakness the project met again in every milestone.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s4"><h2><span class="no">4</span>What the classifier looks at</h2><p class="lede">Where the networks look in a photo, what they do when there is no object at all, and what could not be re-verified.</p>
+<h3>1. Heat maps</h3><p>Grad-CAM colours each part of a photo by how much it pushed the network towards its answer. For clearly visible objects the pretrained networks focus tightly on the object itself.</p><h3>2. The background test</h3><p>A sharper question: shown a photo of an <b>empty room</b>, which object does the model name? Every model named the photographer's own object for about a third of the empty scenes: ConvNeXt-Tiny <b>35.7%</b>, against <b>1.37%</b> by chance (1 in 73). Its confidence was low (0.36 against 0.89 on real photos), so the room is a weak, secondary cue. A classifier must always name something; this finding became the thread that Milestone 3 later repaired.</p><h3>3. The eight errors</h3><p>On the 1,042 test photos ConvNeXt-Tiny made 8 errors: 4 photos with several objects in view, 2 look-alikes, 1 very small object and 1 screenshot.</p><h3>4. What could not be re-verified</h3><p>The submitted study ran in Google Colab and its notebook was saved without outputs, so its numbers come from the Milestone 1 report alone. A local run with the same split, recipe and rule is fully logged and reached the same conclusion (ConvNeXt-Tiny, 99.42%). The submitted 99.23% stays the official result; the local run is the replication.</p><div class="note">A small puzzle, honestly recorded: the background test used 378 photos although 385 were removed. No file records why; most likely the 385 contain seven byte-identical copies (385 − 7 = 378) that the Colab notebook removed before filtering the backgrounds.</div><p class="top"><a href="#contents">back to contents</a></p></section><h1 class="part" id="milestone-2">Milestone 2</h1><section id="s5"><h2><span class="no">5</span>The problem</h2><p class="lede">What Milestone 2 asked, and why it was much harder than Milestone 1.</p>
+<p>Milestone 1 trained a classifier: one photo in, the name of its single object out. Milestone 2 asks for <b>object detection</b>: for every object in an image, its Object ID and a <b>bounding box</b>, the smallest rectangle around it, written as four numbers (left, top, right, bottom in pixels).</p>
+<h3>Why it was harder</h3>
+<ul>
+<li><b>No boxes existed.</b> The course dataset only said which object each photo shows. A detector needs boxes twice: to learn from, and to be graded against. Making about 7,000 boxes became the largest part of the project.</li>
+<li><b>Finding is harder than naming.</b> Many objects are small, far away or in clutter, and several look alike (watches, wallets, rackets).</li>
+<li><b>The multi-object images had to be built.</b> The milestone defines them as grids of 224 × 224 photos, from 2x2 (4 objects) to 5x5 (25 objects).</li>
+</ul>
+<h3>The data</h3>
+<p>Milestone 1's cleaning turned 7,343 files into 6,942 usable photos of 73 objects, removing 385 background-only photos and exact duplicates. They are split 70/15/15 per object with a fixed seed (42): 4,859 training, 1,041 validation and 1,042 test photos. A grid is only ever built from photos of one split.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s6"><h2><span class="no">6</span>Making the boxes</h2><p class="lede">How about 7,000 boxes were made without drawing them all by hand: three box-drawers that fail in different ways, and a vote.</p>
+<h3>Three rules set first</h3>
+<ul><li><b>Independence:</b> trust a box only when methods that fail differently agree on it.</li>
+<li><b>People check the test boxes:</b> the test set produces every reported number.</li>
+<li><b>Measure, don't assume:</b> measure how often the machine boxes are right.</li></ul>
+<h3>The three box-drawers</h3>
+<div class="tablewrap"><table>
+<tr><th>Drawer</th><th>How it works</th><th>What happened</th></tr>
+<tr><td>OWLv2, text prompt</td><td>an open-vocabulary detector that looks for whatever a sentence describes; given the object's name, its highest-scoring box is kept</td><td>run on all 6,936 photos; 5,570 usable boxes (80.3%)</td></tr>
+<tr><td>OWLv2, image prompt</td><td>the same model, shown 3 example crops per object (hand-drawn for 7 objects) and asked to find something similar</td><td>its boxes often covered floor, bed or table; it agreed with the text boxes on only 47.9% of photos, so it was demoted to one vote</td></tr>
+<tr><td>YOLO helper (YOLO26-s)</td><td>trained by the project on 3,915 usable text-prompt boxes from training photos only, 40 epochs; then run on every photo</td><td>validation mAP@0.5 = 0.950 on single photos; never saw a validation or test photo, so its opinion there is independent</td></tr>
+</table></div>
+<p>The other 940 boxed training photos (4,855 − 3,915; 4 of the 4,859 training photos were excluded) were not used to teach the helper, but still received a helper box and an image-prompt box and went through the vote. Only the helper was trained by the project; OWLv2 is ready-made.</p>
+<h3>The vote</h3>
+<p>Two boxes "agree" when their IoU is at least 0.70; the helper may vote only when its confidence is at least 0.25, and every voting box must cover between 1% and 97% of the photo. All three agree: <b>strong</b> (3,172 photos). Exactly two agree: <b>auto</b> (2,935). Otherwise the photo goes to <b>review</b> by a person: 794 where no two boxes agree, and 35 where the helper confidently sees another object (829 in all). Strong and auto boxes (6,107) were accepted, because two methods with different blind spots rarely make the same mistake in the same place.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s7"><h2><span class="no">7</span>People checking, and the complete box flow</h2><p class="lede">Who checked what, how the checking measured the machine boxes, and how every photo ends up in exactly one place. The full verified flow is in the diagram below.</p>
+<h3>What people checked</h3>
+<div class="tablewrap"><table>
+<tr><th>What</th><th class="n">Photos</th><th>Outcome</th></tr>
+<tr><td>Every test photo</td><td class="n">1,041</td><td>885 confirmed, 156 corrected</td></tr>
+<tr><td>A random sample of accepted training boxes</td><td class="n">240</td><td>233 correct (97.1%)</td></tr>
+<tr><td>Two objects without usable machine boxes (OBJ040, OBJ043)</td><td class="n">~190</td><td>boxed by hand</td></tr>
+<tr><td>Hard photos of 8 objects that would otherwise lose over 20% of their photos</td><td class="n">–</td><td>boxed by hand</td></tr>
+<tr><td>Five label rules, all splits (later, after training Runs 1–4)</td><td class="n">–</td><td>re-checked and corrected (next section)</td></tr>
+<tr><td>Total drawn or confirmed by a person</td><td class="n">1,968</td><td></td></tr>
+</table></div>
+<p>Because every test photo was checked anyway, the check also measured the vote: 863 of the 873 accepted test boxes were right (98.9%). On that basis the remaining 4,660 accepted training and validation boxes were trusted without being looked at. 314 photos (4.5%) were left out: 6 that are not photos of their object and 308 without a usable box; no object lost more than 20% of its photos (OBJ059 lost exactly 20.0%) and 27 lost none. The split came first, in Milestone 1, before any box existed; the vote rule was the same in every split, and only the amount of human checking differed.</p><p class="lede">The complete flow from 7,343 raw files to 6,628 photos with a bounding box: the split, the three box-drawers, the vote, and who checked what. Every number comes from the Milestone 2 report or the status counts of <code>boxes_master.csv</code>; numbers marked * are subtraction from them.</p>
+
+<div class="figure" role="img" aria-label="Flow diagram of the Milestone 2 box pipeline">
+<svg viewBox="0 0 680 1620" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1 L8 5 L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="39" text-anchor="middle" dominant-baseline="central">Step 1 · 7,343 files</text><text class="ts" x="340" y="58" text-anchor="middle" dominant-baseline="central">course dataset, 73 objects</text></g>
+<line x1="340" y1="76" x2="340" y2="102" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="190" y="104" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="123" text-anchor="middle" dominant-baseline="central">6,942 photos</text><text class="ts" x="340" y="142" text-anchor="middle" dominant-baseline="central">385 background-only + 16* duplicates out</text></g>
+<line x1="340" y1="160" x2="340" y2="186" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="190" y="188" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="207" text-anchor="middle" dominant-baseline="central">Step 2 · split before any box</text><text class="ts" x="340" y="226" text-anchor="middle" dominant-baseline="central">70/15/15 per object, seed 42</text></g>
+<path d="M340 244 L340 258 L130 258 L130 270" class="arr" marker-end="url(#arrow3)"/>
+<path d="M340 258 L340 270" class="arr" marker-end="url(#arrow3)"/>
+<path d="M340 258 L550 258 L550 270" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="40" y="272" width="180" height="56" rx="8" stroke-width="0.5"/><text class="th" x="130" y="291" text-anchor="middle" dominant-baseline="central">Training</text><text class="ts" x="130" y="310" text-anchor="middle" dominant-baseline="central">4,859 photos</text></g>
+<g class="c-gray"><rect x="250" y="272" width="180" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="291" text-anchor="middle" dominant-baseline="central">Validation</text><text class="ts" x="340" y="310" text-anchor="middle" dominant-baseline="central">1,041 photos</text></g>
+<g class="c-gray"><rect x="460" y="272" width="180" height="56" rx="8" stroke-width="0.5"/><text class="th" x="550" y="291" text-anchor="middle" dominant-baseline="central">Test</text><text class="ts" x="550" y="310" text-anchor="middle" dominant-baseline="central">1,042 photos</text></g>
+<line x1="130" y1="328" x2="130" y2="368" class="arr" marker-end="url(#arrow3)"/>
+<line x1="340" y1="328" x2="340" y2="368" class="arr" marker-end="url(#arrow3)"/>
+<line x1="550" y1="328" x2="550" y2="368" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="40" y="370" width="600" height="70" rx="8" stroke-width="0.5"/><text class="th" x="340" y="388" text-anchor="middle" dominant-baseline="central">6,936 photos get boxes</text><text class="ts" x="340" y="407" text-anchor="middle" dominant-baseline="central">6 excluded: a screenshot (OBJ054_017) and 5 OBJ004 photos</text><text class="ts" x="340" y="425" text-anchor="middle" dominant-baseline="central">without the toy car · 4 train, 1 val, 1 test</text></g>
+<line x1="130" y1="440" x2="130" y2="522" class="arr" marker-end="url(#arrow3)"/>
+<line x1="340" y1="440" x2="340" y2="522" class="arr" marker-end="url(#arrow3)"/>
+<line x1="550" y1="440" x2="550" y2="522" class="arr" marker-end="url(#arrow3)"/>
+<rect x="28" y="508" width="624" height="140" rx="14" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="5 4"/><g class="c-gray"><rect x="40" y="524" width="180" height="110" rx="8" stroke-width="0.5"/><text class="th" x="130" y="544" text-anchor="middle" dominant-baseline="central">OWLv2 text prompt</text><text class="ts" x="130" y="564" text-anchor="middle" dominant-baseline="central">1 box on every photo</text><text class="ts" x="130" y="582" text-anchor="middle" dominant-baseline="central">5,570 usable (80.3%)</text><text class="ts" x="130" y="600" text-anchor="middle" dominant-baseline="central">of training: 3,915 used</text><text class="ts" x="130" y="618" text-anchor="middle" dominant-baseline="central">940* not used</text></g>
+<line x1="220" y1="579" x2="248" y2="579" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="250" y="524" width="180" height="110" rx="8" stroke-width="0.5"/><text class="th" x="340" y="544" text-anchor="middle" dominant-baseline="central">YOLO helper</text><text class="ts" x="340" y="564" text-anchor="middle" dominant-baseline="central">taught first on 3,915</text><text class="ts" x="340" y="582" text-anchor="middle" dominant-baseline="central">usable training boxes</text><text class="ts" x="340" y="600" text-anchor="middle" dominant-baseline="central">40 epochs · val 0.950</text><text class="ts" x="340" y="618" text-anchor="middle" dominant-baseline="central">then 1 box per photo</text></g>
+<g class="c-gray"><rect x="460" y="524" width="180" height="110" rx="8" stroke-width="0.5"/><text class="th" x="550" y="544" text-anchor="middle" dominant-baseline="central">OWLv2 image prompt</text><text class="ts" x="550" y="564" text-anchor="middle" dominant-baseline="central">3 example crops/object</text><text class="ts" x="550" y="582" text-anchor="middle" dominant-baseline="central">to find similar objects</text><text class="ts" x="550" y="600" text-anchor="middle" dominant-baseline="central">(7 objects by hand)</text><text class="ts" x="550" y="618" text-anchor="middle" dominant-baseline="central">then 1 box per photo</text></g>
+<line x1="130" y1="634" x2="130" y2="688" class="arr" marker-end="url(#arrow3)"/>
+<line x1="340" y1="634" x2="340" y2="688" class="arr" marker-end="url(#arrow3)"/>
+<line x1="550" y1="634" x2="550" y2="688" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-gray"><rect x="40" y="690" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="712" text-anchor="middle" dominant-baseline="central">Step 3 · the vote: 3 boxes per photo, all 6,936</text><text class="ts" x="340" y="734" text-anchor="middle" dominant-baseline="central">two boxes match at IoU ≥ 0.70 (the helper votes at confidence ≥ 0.25)</text><text class="ts" x="340" y="754" text-anchor="middle" dominant-baseline="central">3 match = strong · 2 match = auto · otherwise = review</text></g>
+<path d="M340 774 L340 784 L135 784 L135 798" class="arr" marker-end="url(#arrow3)"/>
+<path d="M340 784 L335 784 L335 798" class="arr" marker-end="url(#arrow3)"/>
+<path d="M340 784 L545 784 L545 798" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-teal"><rect x="50" y="800" width="170" height="56" rx="8" stroke-width="0.5"/><text class="th" x="135" y="819" text-anchor="middle" dominant-baseline="central">3,172 strong</text><text class="ts" x="135" y="838" text-anchor="middle" dominant-baseline="central">accepted</text></g>
+<g class="c-teal"><rect x="250" y="800" width="170" height="56" rx="8" stroke-width="0.5"/><text class="th" x="335" y="819" text-anchor="middle" dominant-baseline="central">2,935 auto</text><text class="ts" x="335" y="838" text-anchor="middle" dominant-baseline="central">accepted</text></g>
+<g class="c-gray"><rect x="460" y="800" width="170" height="56" rx="8" stroke-width="0.5"/><text class="th" x="545" y="819" text-anchor="middle" dominant-baseline="central">829 review</text><text class="ts" x="545" y="838" text-anchor="middle" dominant-baseline="central">a person decides</text></g>
+<path d="M135 856 L135 870 L235 870 L235 884" class="arr" marker-end="url(#arrow3)"/>
+<path d="M335 856 L335 870 L235 870" class="ln"/>
+<g class="c-teal"><rect x="50" y="886" width="370" height="56" rx="8" stroke-width="0.5"/><text class="th" x="235" y="905" text-anchor="middle" dominant-baseline="central">6,107 accepted</text><text class="ts" x="235" y="924" text-anchor="middle" dominant-baseline="central">3,172 + 2,935</text></g>
+<path d="M235 942 L235 962 L107 962 L107 980" class="arr" marker-end="url(#arrow3)"/>
+<path d="M235 962 L257 962 L257 980" class="arr" marker-end="url(#arrow3)"/>
+<path d="M545 856 L545 962 L407 962 L407 980" class="arr" marker-end="url(#arrow3)"/>
+<path d="M545 962 L557 962 L557 980" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-teal"><rect x="40" y="982" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="107" y="1000" text-anchor="middle" dominant-baseline="central">5,234*</text><text class="ts" x="107" y="1019" text-anchor="middle" dominant-baseline="central">train + val</text><text class="ts" x="107" y="1037" text-anchor="middle" dominant-baseline="central">accepted</text></g>
+<g class="c-teal"><rect x="190" y="982" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="257" y="1000" text-anchor="middle" dominant-baseline="central">873</text><text class="ts" x="257" y="1019" text-anchor="middle" dominant-baseline="central">test</text><text class="ts" x="257" y="1037" text-anchor="middle" dominant-baseline="central">accepted</text></g>
+<g class="c-gray"><rect x="340" y="982" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="407" y="1000" text-anchor="middle" dominant-baseline="central">168*</text><text class="ts" x="407" y="1019" text-anchor="middle" dominant-baseline="central">test</text><text class="ts" x="407" y="1037" text-anchor="middle" dominant-baseline="central">to review</text></g>
+<g class="c-gray"><rect x="490" y="982" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="557" y="1000" text-anchor="middle" dominant-baseline="central">661*</text><text class="ts" x="557" y="1019" text-anchor="middle" dominant-baseline="central">train + val</text><text class="ts" x="557" y="1037" text-anchor="middle" dominant-baseline="central">to review</text></g>
+<path d="M257 1052 L257 1066 L332 1066 L332 1080" class="arr" marker-end="url(#arrow3)"/>
+<path d="M407 1052 L407 1066 L332 1066" class="ln"/>
+<g class="c-purple"><rect x="190" y="1082" width="285" height="56" rx="8" stroke-width="0.5"/><text class="th" x="332" y="1101" text-anchor="middle" dominant-baseline="central">1,041 test photos</text><text class="ts" x="332" y="1120" text-anchor="middle" dominant-baseline="central">every one checked by a person</text></g>
+<path d="M332 1138 L332 1152 L257 1152 L257 1166" class="arr" marker-end="url(#arrow3)"/>
+<path d="M332 1152 L407 1152 L407 1166" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-purple"><rect x="190" y="1168" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="257" y="1186" text-anchor="middle" dominant-baseline="central">of the 873</text><text class="ts" x="257" y="1205" text-anchor="middle" dominant-baseline="central">863 right</text><text class="ts" x="257" y="1223" text-anchor="middle" dominant-baseline="central">10 fixed</text></g>
+<g class="c-purple"><rect x="340" y="1168" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="407" y="1186" text-anchor="middle" dominant-baseline="central">of the 168</text><text class="ts" x="407" y="1205" text-anchor="middle" dominant-baseline="central">22* right</text><text class="ts" x="407" y="1223" text-anchor="middle" dominant-baseline="central">146* fixed</text></g>
+<path d="M257 1238 L257 1246 L332 1246 L332 1256" class="arr" marker-end="url(#arrow3)"/>
+<path d="M407 1238 L407 1246 L332 1246" class="ln"/>
+<g class="c-purple"><rect x="190" y="1258" width="285" height="56" rx="8" stroke-width="0.5"/><text class="th" x="332" y="1277" text-anchor="middle" dominant-baseline="central">885 verified + 156 fixed</text><text class="ts" x="332" y="1296" text-anchor="middle" dominant-baseline="central">accepted test boxes: 98.9% right</text></g>
+<path d="M107 1052 L107 1066 L30 1066 L30 1247" class="ln"/>
+<path d="M30 1137 L38 1137" class="arr" marker-end="url(#arrow3)"/>
+<path d="M30 1247 L38 1247" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-purple"><rect x="40" y="1082" width="135" height="110" rx="8" stroke-width="0.5"/><text class="th" x="107" y="1102" text-anchor="middle" dominant-baseline="central">574*</text><text class="ts" x="107" y="1122" text-anchor="middle" dominant-baseline="central">240 random</text><text class="ts" x="107" y="1140" text-anchor="middle" dominant-baseline="central">(233 right)</text><text class="ts" x="107" y="1158" text-anchor="middle" dominant-baseline="central">~334 re-checked</text><text class="ts" x="107" y="1176" text-anchor="middle" dominant-baseline="central">after Runs 1–4</text></g>
+<g class="c-teal"><rect x="40" y="1212" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="107" y="1230" text-anchor="middle" dominant-baseline="central">4,660</text><text class="ts" x="107" y="1249" text-anchor="middle" dominant-baseline="central">never checked</text><text class="ts" x="107" y="1267" text-anchor="middle" dominant-baseline="central">sample: 97.1%</text></g>
+<path d="M557 1052 L557 1066 L650 1066 L650 1247" class="ln"/>
+<path d="M650 1137 L627 1137" class="arr" marker-end="url(#arrow3)"/>
+<path d="M650 1247 L627 1247" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-purple"><rect x="490" y="1082" width="135" height="110" rx="8" stroke-width="0.5"/><text class="th" x="557" y="1102" text-anchor="middle" dominant-baseline="central">353*</text><text class="ts" x="557" y="1122" text-anchor="middle" dominant-baseline="central">boxed by hand:</text><text class="ts" x="557" y="1140" text-anchor="middle" dominant-baseline="central">~190 OBJ040/043</text><text class="ts" x="557" y="1158" text-anchor="middle" dominant-baseline="central">8 objects kept</text><text class="ts" x="557" y="1176" text-anchor="middle" dominant-baseline="central">at 80% or more</text></g>
+<g class="c-gray"><rect x="490" y="1212" width="135" height="70" rx="8" stroke-width="0.5"/><text class="th" x="557" y="1230" text-anchor="middle" dominant-baseline="central">308 no box</text><text class="ts" x="557" y="1249" text-anchor="middle" dominant-baseline="central">304 unreviewed</text><text class="ts" x="557" y="1267" text-anchor="middle" dominant-baseline="central">4 fix pending</text></g>
+<g class="c-teal"><rect x="40" y="1350" width="190" height="84" rx="8" stroke-width="0.5"/><text class="th" x="135" y="1372" text-anchor="middle" dominant-baseline="central">4,660</text><text class="ts" x="135" y="1394" text-anchor="middle" dominant-baseline="central">unreviewed_auto</text><text class="ts" x="135" y="1414" text-anchor="middle" dominant-baseline="central">never seen by a person</text></g>
+<g class="c-purple"><rect x="245" y="1350" width="190" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="1372" text-anchor="middle" dominant-baseline="central">1,968</text><text class="ts" x="340" y="1394" text-anchor="middle" dominant-baseline="central">verified 1,343</text><text class="ts" x="340" y="1414" text-anchor="middle" dominant-baseline="central">+ fixed 625</text></g>
+<g class="c-gray"><rect x="450" y="1350" width="190" height="84" rx="8" stroke-width="0.5"/><text class="th" x="545" y="1372" text-anchor="middle" dominant-baseline="central">308 + 6</text><text class="ts" x="545" y="1394" text-anchor="middle" dominant-baseline="central">no usable box (308)</text><text class="ts" x="545" y="1414" text-anchor="middle" dominant-baseline="central">excluded (6)</text></g>
+<line x1="135" y1="1434" x2="135" y2="1458" class="arr" marker-end="url(#arrow3)"/>
+<line x1="340" y1="1434" x2="340" y2="1458" class="arr" marker-end="url(#arrow3)"/>
+<line x1="545" y1="1434" x2="545" y2="1458" class="arr" marker-end="url(#arrow3)"/>
+<g class="c-teal"><rect x="40" y="1460" width="395" height="56" rx="8" stroke-width="0.5"/><text class="th" x="237" y="1479" text-anchor="middle" dominant-baseline="central">Step 4 · 6,628 photos with a box</text><text class="ts" x="237" y="1498" text-anchor="middle" dominant-baseline="central">4,660 + 1,968, from boxes_master.csv</text></g>
+<g class="c-gray"><rect x="455" y="1460" width="185" height="56" rx="8" stroke-width="0.5"/><text class="th" x="547" y="1479" text-anchor="middle" dominant-baseline="central">314 left out (4.5%)</text><text class="ts" x="547" y="1498" text-anchor="middle" dominant-baseline="central">no object over 20%</text></g>
+<g class="c-gray"><rect x="40" y="1540" width="600" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="1559" text-anchor="middle" dominant-baseline="central">Check: 4,660 + 1,968 + 308 + 6 = 6,942 photos</text><text class="ts" x="340" y="1578" text-anchor="middle" dominant-baseline="central">* derived by subtraction from the report and box-file numbers</text></g>
+<g><circle cx="130" cy="470" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="130" y="470" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">1</text></g><g><circle cx="550" cy="470" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="550" y="470" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">1</text></g><g><circle cx="234" cy="566" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="234" y="566" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">2</text></g><g><circle cx="340" cy="470" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="340" y="470" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">3</text></g><g><circle cx="130" cy="662" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="130" y="662" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">4</text></g><g><circle cx="340" cy="662" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="340" y="662" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">4</text></g><g><circle cx="550" cy="662" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="550" y="662" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">4</text></g><g><circle cx="175" cy="1131" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="175" y="1131" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">5</text></g><g><circle cx="175" cy="1167" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="175" y="1167" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">6</text></g><g><circle cx="190" cy="1082" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="190" y="1082" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">5</text></g><g><circle cx="490" cy="1082" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="490" y="1082" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">5</text></g></svg>
+</div><ol class="seq">
+<li><b>1</b> OWLv2's text prompt and its image prompt each draw one box on all 6,936 photos, independently of each other.</li>
+<li><b>2</b> The 3,915 usable text-prompt boxes from training photos teach the YOLO helper (40 epochs).</li>
+<li><b>3</b> The trained helper then draws its own box on all 6,936 photos.</li>
+<li><b>4</b> Every photo's three boxes go to the vote.</li>
+<li><b>5</b> Right after the vote, a person checks every test photo, a random 240 accepted training boxes (233 right) and the review photos (353 boxed by hand in training and validation).</li>
+<li><b>6</b> Later, during training: Runs 1–2 revealed the sneakers and Runs 3–4 the tissue box, analog watch, power bank and paddle. Every photo of those five objects was re-checked against its new rule, about 334 accepted training and validation boxes. Together with the 240, they make the 574.</li>
+</ol>
+<div class="key"><span><i class="sw p"></i>a person looked at the box</span><span><i class="sw t"></i>machine box accepted</span><span><i class="sw g"></i>neutral step</span></div>
+
+<h3>How to read it</h3>
+<p>The split comes first and is fixed before any box exists. Every photo then gets the same treatment: one box from each of three drawers, and a vote. The only difference between the sets is how much a person checks afterwards: every test photo, but only selected training and validation photos.</p>
+<ul>
+<li>The OWLv2 text prompt boxes every photo. Its usable boxes on training photos (3,915) teach the YOLO helper first; the helper then boxes every photo too.</li>
+<li>The OWLv2 image prompt searches every photo using 3 example crops per object (hand-drawn for 7 objects). Its boxes often covered floor or bed, so it only ever counts as one vote.</li>
+<li>Strong and auto boxes were accepted. The test set measured how trustworthy that is: 863 of 873 accepted test boxes were right (98.9%).</li>
+<li>In training and validation, 574 accepted boxes were checked anyway, at two different times: a random sample of 240 right after the vote (233 right, 97.1%), and later about 334 re-checks of the five rule objects, found after training Runs 1–2 and 3–4. The other 4,660 were never seen by a person.</li>
+</ul>
+
+<h3>The five label rules</h3>
+<div class="tablewrap"><table>
+<tr><th>Object</th><th>Rule</th></tr>
+<tr><td>OBJ010 sneakers</td><td>one box around both shoes</td></tr>
+<tr><td>OBJ034 paddle</td><td>the paddle only, never the tennis racket</td></tr>
+<tr><td>OBJ048 power bank</td><td>the silver one only</td></tr>
+<tr><td>OBJ051 tissue</td><td>the whole tissue box</td></tr>
+<tr><td>OBJ065 analog watch</td><td>case and strap</td></tr>
+</table></div>
+
+<h3>Derived numbers</h3>
+<div class="tablewrap"><table>
+<tr><th>Number</th><th>Calculation</th></tr>
+<tr><td class="n">16 duplicates</td><td>7,343 − 6,942 − 385</td></tr>
+
+<tr><td class="n">940</td><td>4,855 boxed training photos (4,859 − 4 excluded) − 3,915 used to teach the helper</td></tr>
+<tr><td class="n">5,234 and 168</td><td>6,107 accepted − 873 accepted test; 1,041 test − 873</td></tr>
+<tr><td class="n">661</td><td>829 to review − 168 test</td></tr>
+<tr><td class="n">22 and 146</td><td>885 verified − 863; 156 fixed − 10</td></tr>
+<tr><td class="n">574 and 353</td><td>5,234 − 4,660; 661 − 308. Together 927 = 1,968 − 1,041</td></tr>
+</table></div>
+
+<h3>Confirmed by the fact sheet</h3>
+<p>Four details that an earlier audit could not confirm were later verified in the box pipeline's code and outputs:</p>
+<ul>
+<li>the 829 reviews split into 794 "review" (no two boxes agree) and 35 "review_label" (the helper confidently sees another object);</li>
+<li>accepted test boxes: strong 462 of 464 right (99.6%), auto 401 of 409 (98.0%), 863 of 873 overall (98.9%);</li>
+<li>the vote's rule: two boxes agree at IoU ≥ 0.70; the helper votes only at confidence ≥ 0.25; every voting box must cover 1–97% of the photo;</li>
+<li>the text-prompt flags: score below 0.15 (1,206 photos), box under 1% of the photo (144), box over 97% (16); the photos sent to fixing had a median overlap of 0.23 between the automatic and the human box.</li>
+</ul><p class="top"><a href="#contents">back to contents</a></p></section><section id="s8"><h2><span class="no">8</span>The label audit</h2><p class="lede">How five objects turned out to have been boxed in two different ways, and why fixing them mattered more than changing the model.</p>
+<h3>Why inconsistent boxes are so harmful</h3>
+<p>If the tissue box is boxed around only the paper in some photos and around the whole box in others, the model receives contradictory answers and hedges, and even a perfect prediction is marked wrong against half the answer key, because the two rectangles barely overlap (IoU about 0.30). It is like grading with two answer keys mixed together.</p>
+<h3>How they were found and fixed</h3>
+<p>The trained models scored a few objects far below the rest; looking at every box of those objects side by side showed two ways of boxing. One rule was written per object, and every photo of it was re-checked in every split. The fixes came in two rounds: the sneaker rule first, then four more.</p>
+<div class="tablewrap"><table>
+<tr><th>Object</th><th>Rule</th><th class="n">AP</th></tr>
+<tr><td>OBJ051 tissue</td><td>the whole tissue box</td><td class="n">0.30 → 0.995</td></tr>
+<tr><td>OBJ065 analog watch</td><td>case and strap</td><td class="n">0.59 → 0.81</td></tr>
+<tr><td>OBJ048 power bank</td><td>the silver one only</td><td class="n">0.71 → 0.95</td></tr>
+<tr><td>OBJ010 sneakers</td><td>one box around both shoes</td><td class="n">–</td></tr>
+<tr><td>OBJ034 paddle</td><td>the paddle only, never the tennis racket</td><td class="n">0.67 → 0.59</td></tr>
+</table></div>
+<p>The records do not say which run or split the AP values were measured on. The lesson, in the project's own words: consistent labels mattered more than the choice of model. In Milestone 3 it became one rule for all objects: box the whole object, every visible part, tight to its edges.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s9"><h2><span class="no">9</span>Building the grids</h2><p class="lede">When and how the grid images were built, and what that does and does not add to the dataset.</p>
+<h3>When and how</h3>
+<p>After the split and after every photo had its box. Each photo is 224 × 224 px and fills one cell: 2x2 = 448 px, 3x3 = 672, 4x4 = 896, 5x4 = 1,120 × 896, 5x5 = 1,120 px. The box moves with its photo: a box from (50, 30) to (180, 200), placed in column 2, row 1 (counting from 0), shifts by 448 across and 224 down to (498, 254)–(628, 424).</p>
+<h3>Three kinds of grids</h3>
+<div class="tablewrap"><table>
+<tr><th>Set</th><th>Built</th><th>Contents</th></tr>
+<tr><td>Validation</td><td>once, fixed</td><td>68 grids, 972 objects, every validation photo once</td></tr>
+<tr><td>Test</td><td>once, fixed</td><td>72 grids: 16 of 2x2 and 14 each of 3x3, 4x4, 5x4, 5x5; plus 84 images of other input types</td></tr>
+<tr><td>Training</td><td>once, fixed on disk</td><td>1,500 images; Runs 1–4 grids only (~300 per size), Run 5 85% grids (~255 per size, half with look-alikes side by side) + 15% single photos (~225)</td></tr>
+</table></div>
+<p>The 16 test 2x2 grids hold 61 objects plus 3 empty background filler cells, so the 72 test grids contain exactly 1,041 objects. Later counts of 1,044 and 1,048 belong to Milestone 3's corrected answer keys (second objects added).</p>
+<h3>Did it increase the dataset?</h3>
+<p>The number of training images went up, but not the number of different photos: still the same training photos, each appearing in about 4 of the 1,500 images, in different grids, neighbours and positions. It is like reshuffling one deck of cards: no new cards, many new hands. On top of that, Ultralytics changes every image each time it is loaded (flips, colour, mosaic, small zoom and shift), so no epoch sees exactly the same pictures.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s10"><h2><span class="no">10</span>Training, validation and test</h2><p class="lede">The three groups of photos and their three different jobs.</p>
+<div class="tablewrap"><table>
+<tr><th>Group</th><th>Analogy</th><th>Job</th><th class="n">Photos</th></tr>
+<tr><td>Training</td><td>textbook and homework</td><td>the model learns from these</td><td class="n">4,859</td></tr>
+<tr><td>Validation</td><td>practice exams</td><td>used to make every decision</td><td class="n">1,041</td></tr>
+<tr><td>Test</td><td>the final exam</td><td>used once, to report the result</td><td class="n">1,042 (1,041 used)</td></tr>
+</table></div>
+<ul>
+<li><b>Training:</b> look at a batch, measure the error (the loss), adjust the weights. Scores on training photos mean nothing, because a model can memorise them (overfitting).</li>
+<li><b>Validation:</b> after every epoch the model is scored but learns nothing. The score keeps the best epoch (best.pt), stops training when it is flat (12 epochs in Milestone 2), picks between runs and picks the settings. Because many choices are made by looking at it, the chosen model's validation score is slightly optimistic: 0.972 against 0.947 on test.</li>
+<li><b>Test:</b> scored once, after every choice was made, on person-checked boxes.</li>
+</ul>
+<p>Honesty comes from three habits: split by photo before anything else, build grids within one split only, and let the test set decide nothing. Milestone 3 later found 183 near-duplicate pairs across splits and removed 41 training and validation copies.</p>
+<h3>Batch size 4</h3>
+<p>The model looks at 4 images, scores itself once on their average error and adjusts its weights once: 1,500 ÷ 4 = 375 adjustments per epoch. One image at a time would make each adjustment jumpy; all 1,500 at once would not fit in memory. At 1,120 px only 4 fitted in the laptop GPU's 8 GB. Run 2 made 60 × 375 = 22,500 adjustments; the selected model saw 90 epochs × 1,500 = 135,000 training images in total.</p>
+<h3>YOLO label files</h3>
+<p>YOLO keeps one text file per image, not one per object: <code>grid_0001.jpg</code> has <code>grid_0001.txt</code>, with one line per object: the class number and the box's centre x, centre y, width and height as fractions of the image size. The 73 class names are listed once in the dataset file. The box (498, 254)–(628, 424) in a 1,120-px grid is written as 0.5027 0.3027 0.1161 0.1518. The source of truth is <code>boxes_master.csv</code> (one row per photo, in the photo's own coordinates); the label files are generated from it when the grids are built.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s11"><h2><span class="no">11</span>The five model runs</h2><p class="lede">How the detector was trained, improved and chosen: the data it learned from, the two layers of augmentation, the settings, every run with its scores, the two rounds of data fixes, and how the winner was picked. Numbers come from the project's run records; <a href="#s7">lesson 7</a> shows how every photo got its box.</p>
+
+<div class="figure" role="img" aria-label="Flow diagram of Milestone 2 runs 1 to 5">
+<svg viewBox="0 0 680 1440" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrow7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="39" text-anchor="middle" dominant-baseline="central">Start: COCO-pretrained weights</text><text class="ts" x="340" y="58" text-anchor="middle" dominant-baseline="central">already knows 80 everyday objects</text></g>
+<g class="c-purple"><rect x="40" y="104" width="290" height="140" rx="8" stroke-width="0.5"/><text class="th" x="185" y="124" text-anchor="middle" dominant-baseline="central">Training images · built once</text><text class="ts" x="185" y="146" text-anchor="middle" dominant-baseline="central">1,500 images, fixed on disk</text><text class="ts" x="185" y="164" text-anchor="middle" dominant-baseline="central">grids 2x2 to 5x5, 224-px cells</text><text class="ts" x="185" y="182" text-anchor="middle" dominant-baseline="central">runs 1–4: ~300 of each size</text><text class="ts" x="185" y="200" text-anchor="middle" dominant-baseline="central">~20% blurred, low-res, JPEG, dark</text><text class="ts" x="185" y="218" text-anchor="middle" dominant-baseline="central">training photos only</text></g>
+<g class="c-purple"><rect x="350" y="104" width="290" height="140" rx="8" stroke-width="0.5"/><text class="th" x="495" y="124" text-anchor="middle" dominant-baseline="central">Augmentation · every load</text><text class="ts" x="495" y="146" text-anchor="middle" dominant-baseline="central">Ultralytics, different each epoch</text><text class="ts" x="495" y="164" text-anchor="middle" dominant-baseline="central">random flips</text><text class="ts" x="495" y="182" text-anchor="middle" dominant-baseline="central">colour and brightness (HSV)</text><text class="ts" x="495" y="200" text-anchor="middle" dominant-baseline="central">mosaic: parts of 4 images</text><text class="ts" x="495" y="218" text-anchor="middle" dominant-baseline="central">small zoom and shift</text></g>
+<line x1="340" y1="76" x2="340" y2="260" class="arr" marker-end="url(#arrow7)"/>
+<line x1="185" y1="244" x2="185" y2="260" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="244" x2="495" y2="260" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-gray"><rect x="40" y="262" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="284" text-anchor="middle" dominant-baseline="central">Training settings, the same for every run</text><text class="ts" x="340" y="306" text-anchor="middle" dominant-baseline="central">1,120 px · batch 4 · cosine LR · stop after 12 flat epochs (6 when fine-tuning)</text><text class="ts" x="340" y="326" text-anchor="middle" dominant-baseline="central">RTX 5070 laptop GPU (8 GB) · validation: 68 grids, 972 objects</text></g>
+<path d="M340 346 L340 360 L185 360 L185 372" class="arr" marker-end="url(#arrow7)"/>
+<path d="M340 360 L495 360 L495 372" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-gray"><rect x="40" y="374" width="290" height="56" rx="8" stroke-width="0.5"/><text class="th" x="185" y="393" text-anchor="middle" dominant-baseline="central">YOLOv8-s</text><text class="ts" x="185" y="412" text-anchor="middle" dominant-baseline="central">the model in the course brief</text></g>
+<g class="c-gray"><rect x="350" y="374" width="290" height="56" rx="8" stroke-width="0.5"/><text class="th" x="495" y="393" text-anchor="middle" dominant-baseline="central">YOLO26-s</text><text class="ts" x="495" y="412" text-anchor="middle" dominant-baseline="central">newest model from Ultralytics</text></g>
+<line x1="185" y1="430" x2="185" y2="456" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="430" x2="495" y2="456" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-teal"><rect x="40" y="458" width="290" height="84" rx="8" stroke-width="0.5"/><text class="th" x="185" y="480" text-anchor="middle" dominant-baseline="central">Run 1 · trained from COCO</text><text class="ts" x="185" y="502" text-anchor="middle" dominant-baseline="central">56 epochs (stopped early) · 70 min</text><text class="ts" x="185" y="522" text-anchor="middle" dominant-baseline="central">val 0.940 / 0.897 · test 0.910 / 0.846</text></g>
+<g class="c-teal"><rect x="350" y="458" width="290" height="84" rx="8" stroke-width="0.5"/><text class="th" x="495" y="480" text-anchor="middle" dominant-baseline="central">Run 2 · trained from COCO</text><text class="ts" x="495" y="502" text-anchor="middle" dominant-baseline="central">60 epochs · 104 min</text><text class="ts" x="495" y="522" text-anchor="middle" dominant-baseline="central">val 0.943 / 0.907 · test 0.921 / 0.858</text></g>
+<line x1="185" y1="542" x2="185" y2="568" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="542" x2="495" y2="568" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-purple"><rect x="40" y="570" width="600" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="589" text-anchor="middle" dominant-baseline="central">Data fix 1 · the sneaker rule</text><text class="ts" x="340" y="608" text-anchor="middle" dominant-baseline="central">OBJ010: one box around both shoes, in every split · training set rebuilt</text></g>
+<line x1="185" y1="626" x2="185" y2="652" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="626" x2="495" y2="652" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-teal"><rect x="40" y="654" width="290" height="84" rx="8" stroke-width="0.5"/><text class="th" x="185" y="676" text-anchor="middle" dominant-baseline="central">Run 3 · Run 1 + 15 epochs</text><text class="ts" x="185" y="698" text-anchor="middle" dominant-baseline="central">fine-tuned on the fixed labels</text><text class="ts" x="185" y="718" text-anchor="middle" dominant-baseline="central">val 0.952 / 0.906 · test 0.932 / 0.859</text></g>
+<g class="c-teal"><rect x="350" y="654" width="290" height="84" rx="8" stroke-width="0.5"/><text class="th" x="495" y="676" text-anchor="middle" dominant-baseline="central">Run 4 · Run 2 + 15 epochs</text><text class="ts" x="495" y="698" text-anchor="middle" dominant-baseline="central">fine-tuned on the fixed labels</text><text class="ts" x="495" y="718" text-anchor="middle" dominant-baseline="central">val 0.956 / 0.919 · test 0.931 / 0.863</text></g>
+<line x1="185" y1="738" x2="185" y2="764" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="738" x2="495" y2="764" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-gray"><rect x="40" y="766" width="290" height="56" rx="8" stroke-width="0.5"/><text class="th" x="185" y="785" text-anchor="middle" dominant-baseline="central">YOLOv8-s line ends here</text><text class="ts" x="185" y="804" text-anchor="middle" dominant-baseline="central">behind on validation: 0.906 vs 0.919</text></g>
+<g class="c-purple"><rect x="350" y="766" width="290" height="120" rx="8" stroke-width="0.5"/><text class="th" x="495" y="786" text-anchor="middle" dominant-baseline="central">Data fix 2 · 4 more label rules</text><text class="ts" x="495" y="808" text-anchor="middle" dominant-baseline="central">tissue, watch, power bank, paddle</text><text class="ts" x="495" y="826" text-anchor="middle" dominant-baseline="central">set rebuilt: 85% grids (~255 per size)</text><text class="ts" x="495" y="844" text-anchor="middle" dominant-baseline="central">+ 15% single photos (~225)</text><text class="ts" x="495" y="862" text-anchor="middle" dominant-baseline="central">half the grids: look-alikes together</text></g>
+<line x1="495" y1="886" x2="495" y2="912" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-teal"><rect x="350" y="914" width="290" height="84" rx="8" stroke-width="0.5"/><text class="th" x="495" y="936" text-anchor="middle" dominant-baseline="central">Run 5 · Run 4 + 15 epochs</text><text class="ts" x="495" y="958" text-anchor="middle" dominant-baseline="central">fine-tuned twice · 90 epochs in total</text><text class="ts" x="495" y="978" text-anchor="middle" dominant-baseline="central">val 0.972 / 0.930 · test 0.947 / 0.875</text></g>
+<line x1="185" y1="822" x2="185" y2="1024" class="arr" marker-end="url(#arrow7)"/>
+<line x1="495" y1="998" x2="495" y2="1024" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-gray"><rect x="40" y="1026" width="600" height="124" rx="8" stroke-width="0.5"/><text class="th" x="340" y="1048" text-anchor="middle" dominant-baseline="central">Choosing the winner: a rule fixed in advance</text><text class="ts" x="340" y="1070" text-anchor="middle" dominant-baseline="central">highest validation mAP@0.5:0.95, the stricter box score</text><text class="ts" x="340" y="1090" text-anchor="middle" dominant-baseline="central">Run 1 0.897 · Run 2 0.907 · Run 3 0.906 · Run 4 0.919 · Run 5 0.930</text><text class="ts" x="340" y="1110" text-anchor="middle" dominant-baseline="central">settings chosen on validation too: confidence 0.10,</text><text class="ts" x="340" y="1128" text-anchor="middle" dominant-baseline="central">one box per 224-px cell, small images at natural size</text></g>
+<line x1="340" y1="1150" x2="340" y2="1176" class="arr" marker-end="url(#arrow7)"/>
+<g class="c-teal"><rect x="40" y="1178" width="600" height="124" rx="8" stroke-width="0.5"/><text class="th" x="340" y="1200" text-anchor="middle" dominant-baseline="central">Selected: Run 5 (yolo26s_ft2), tested once on 72 grids</text><text class="ts" x="340" y="1222" text-anchor="middle" dominant-baseline="central">mAP@0.5 0.947 · mAP@0.5:0.95 0.875 · precision 0.931 · recall 0.918</text><text class="ts" x="340" y="1242" text-anchor="middle" dominant-baseline="central">objects found 91.8% · grids fully correct 34.7% (95% CI 23.6–45.8)</text><text class="ts" x="340" y="1262" text-anchor="middle" dominant-baseline="central">single photos 14 of 14 · 16 wrong IDs and 69 misses in 1,041 objects</text><text class="ts" x="340" y="1282" text-anchor="middle" dominant-baseline="central">test grids: 16 of 2x2 and 14 each of 3x3, 4x4, 5x4 and 5x5</text></g>
+<g class="c-gray"><rect x="40" y="1330" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="1352" text-anchor="middle" dominant-baseline="central">How to read the scores</text><text class="ts" x="340" y="1374" text-anchor="middle" dominant-baseline="central">each pair is mAP@0.5 / mAP@0.5:0.95 · 0 to 1, higher is better</text><text class="ts" x="340" y="1394" text-anchor="middle" dominant-baseline="central">validation = practice exam, used to choose · test = final exam, used to report</text></g>
+</svg>
+</div>
+<div class="key"><span><i class="sw p"></i>data: what the model learns from</span><span><i class="sw t"></i>a trained model</span><span><i class="sw g"></i>setup and decisions</span></div>
+
+<h3>The ideas behind the diagram</h3>
+<ul>
+<li><b>Two candidates.</b> YOLOv8-s is the model named in the course brief; YOLO26-s is the newest detector from Ultralytics. Comparing them tests whether a newer architecture helps instead of assuming it. Both are small (s) models: at 1,120 px only a batch of 4 fits in the laptop GPU's 8 GB.</li>
+<li><b>COCO pretraining.</b> Both start from weights learnt on about 118,000 everyday photos in 80 categories, so they already recognise edges, shapes and "objectness".</li>
+<li><b>Input size 1,120 px.</b> A 5x5 grid is 5 × 224 = 1,120 px, so every photo keeps its native 224 pixels.</li>
+<li><b>Batch 4.</b> The model predicts on 4 images, measures its error, and adjusts its weights once: 375 adjustments per epoch of 1,500 images.</li>
+<li><b>Fine-tuning.</b> "+ 15 epochs" continues from the previous run's weights on improved data instead of starting again.</li>
+<li><b>Two layers of augmentation.</b> The 1,500 training images are built once and fixed: which photos sit in which grid, the grid sizes, the look-alike groups, the single photos and the baked-in degradations. Ultralytics then changes each image every time it is loaded (flips, colour, mosaic, small zoom and shift), so no epoch sees exactly the same pictures. Each training photo appears in about 4 of the 1,500 images.</li>
+<li><b>Choosing on validation.</b> The winner, the threshold and the post-processing were all chosen on validation by rules fixed in advance; the test set was used only to report the result.</li>
+</ul>
+
+<h3>All five runs</h3>
+<div class="tablewrap"><table>
+<tr><th>Run</th><th>Model</th><th>Starts from</th><th class="n">Epochs</th><th class="n">Val @0.5 / @0.5:0.95</th><th class="n">Test @0.5 / @0.5:0.95</th><th class="n">Precision / recall</th></tr>
+<tr><td>1</td><td>YOLOv8-s</td><td>COCO</td><td class="n">56</td><td class="n">0.940 / 0.897</td><td class="n">0.910 / 0.846</td><td class="n">0.914 / 0.890</td></tr>
+<tr><td>2</td><td>YOLO26-s</td><td>COCO</td><td class="n">60</td><td class="n">0.943 / 0.907</td><td class="n">0.921 / 0.858</td><td class="n">0.922 / 0.884</td></tr>
+<tr><td>3</td><td>YOLOv8-s</td><td>Run 1</td><td class="n">+15</td><td class="n">0.952 / 0.906</td><td class="n">0.932 / 0.859</td><td class="n">0.925 / 0.894</td></tr>
+<tr><td>4</td><td>YOLO26-s</td><td>Run 2</td><td class="n">+15</td><td class="n">0.956 / 0.919</td><td class="n">0.931 / 0.863</td><td class="n">0.922 / 0.910</td></tr>
+<tr class="sel"><td>5 ★</td><td>YOLO26-s</td><td>Run 4</td><td class="n">+15</td><td class="n">0.972 / 0.930</td><td class="n">0.947 / 0.875</td><td class="n">0.931 / 0.918</td></tr>
+</table></div>
+<p><b>Two naming traps.</b> The EYE's journey labels the five Milestone 2 models with letters (A = Run 1, B = Run 2, C = Run 3, E = Run 4, D = Run 5), while the Milestone 2 report uses "runs A–C" for something different: the teammates' alternative pipelines. And the EYE's model list uses descriptions: "YOLO26-s + fine-tune 2 (single photos, look-alikes, label fixes)" is Run 5, the model named <code>yolo26s_ft2</code>.</p>
+<p>Model change (Run 1 → 2): +0.011 test mAP@0.5. Data rounds (Run 2 → 5): +0.026. Run 5's gain also includes the new single photos and look-alike grids, so it is not from the label fixes alone; the per-object effect of the fixes was direct: tissue AP 0.30 → 0.995, watch 0.59 → 0.81, power bank 0.71 → 0.95; the paddle did not improve (0.67 → 0.59).</p>
+
+<h3>The selected model on the test grids</h3>
+<div class="tablewrap"><table>
+<tr><th>Grid</th><th class="n">Grids</th><th class="n">Objects found</th><th class="n">Fully correct</th></tr>
+<tr><td>2x2</td><td class="n">16</td><td class="n">98.4%</td><td class="n">87.5%</td></tr>
+<tr><td>3x3</td><td class="n">14</td><td class="n">89.7%</td><td class="n">35.7%</td></tr>
+<tr><td>4x4</td><td class="n">14</td><td class="n">91.1%</td><td class="n">14.3%</td></tr>
+<tr><td>5x4</td><td class="n">14</td><td class="n">91.8%</td><td class="n">21.4%</td></tr>
+<tr><td>5x5</td><td class="n">14</td><td class="n">92.0%</td><td class="n">7.1%</td></tr>
+<tr class="sel"><td>All</td><td class="n">72</td><td class="n">91.8%</td><td class="n">34.7%</td></tr>
+</table></div>
+<p>"Fully correct" is strict: every object right and no extra box. 48 of the 73 objects reach AP ≥ 0.95; the weakest are the paddle (0.59), card wallet (0.62), mouth-guard case (0.77) and sunglasses (0.79), all look-alikes or small. On heavily degraded images (quarter resolution, dark, JPEG quality 20) mAP@0.5 drops to 0.428. Weights: <code>milestone2_outputs\detect\runs\yolo26s_ft2\weights\best.pt</code>.</p>
+
+<h3>Images per run</h3>
+<div class="tablewrap"><table>
+<tr><th>Run</th><th>Training images</th><th>Grids</th><th class="n">Single photos</th><th class="n">Validation</th><th class="n">Test</th><th class="n">Total</th></tr>
+<tr><td>1</td><td>1,500</td><td>1,500 (300 per size)</td><td class="n">0</td><td class="n">68 grids</td><td class="n">72 grids</td><td class="n">1,640</td></tr>
+<tr><td>2</td><td>1,500</td><td>1,500 (300 per size)</td><td class="n">0</td><td class="n">68</td><td class="n">72</td><td class="n">1,640</td></tr>
+<tr><td>3</td><td>1,500, rebuilt after the sneaker fix</td><td>1,500 (300 per size)</td><td class="n">0</td><td class="n">68</td><td class="n">72</td><td class="n">1,640</td></tr>
+<tr><td>4</td><td>same set as Run 3</td><td>1,500 (300 per size)</td><td class="n">0</td><td class="n">68</td><td class="n">72</td><td class="n">1,640</td></tr>
+<tr class="sel"><td>5 ★</td><td>1,500, rebuilt for round 2</td><td>1,275 (255 per size)</td><td class="n">225</td><td class="n">68</td><td class="n">72</td><td class="n">1,640</td></tr>
+</table></div>
+<p>Training totals are fixed at 1,500 by design; the per-size counts are exact: 300 per size in the grids-only sets, 255 per size plus 225 single photos in the final set. The validation set used during training changed with the dataset version (Runs 1–2: 67 grids, 952 objects; Runs 3–4: 66 grids, 958; Run 5: 68 grids, 972); all five runs were finally re-scored on the same 68 validation and 72 test grids (16 of 2x2 and 14 each of 3x3, 4x4, 5x4 and 5x5; 1,041 objects). A second test set of 84 images covers the other input types; it is not in the totals, because the records do not say whether every run was scored on it. Only the training images are learnt from: validation makes the decisions, test reports the result.</p>
+<div class="tablewrap"><table>
+<tr><th>Run</th><th class="n">Epochs</th><th class="n">Training images seen</th><th>Total from COCO onward</th></tr>
+<tr><td>1</td><td class="n">56</td><td class="n">84,000</td><td>84,000</td></tr>
+<tr><td>2</td><td class="n">60</td><td class="n">90,000</td><td>90,000</td></tr>
+<tr><td>3</td><td class="n">+15</td><td class="n">22,500</td><td>106,500 (Runs 1 + 3)</td></tr>
+<tr><td>4</td><td class="n">+15</td><td class="n">22,500</td><td>112,500 (Runs 2 + 4)</td></tr>
+<tr class="sel"><td>5 ★</td><td class="n">+15</td><td class="n">22,500</td><td>135,000 (Runs 2 + 4 + 5): 90 epochs × 1,500</td></tr>
+</table></div>
+<p>Each training photo appears in about 4 of the 1,500 images, so a run of 60 epochs shows each photo roughly 240 times, never in exactly the same form, because of the on-the-fly augmentation.</p>
+
+<h3>Resolved by the fact sheet</h3>
+<ul>
+<li><b>Dataset versions:</b> Runs 1–2 trained on the grids-only set of 9 October (22,200 training boxes), Runs 3–4 on the same design rebuilt after the sneaker fix, Run 5 on the final set with single photos and look-alike groups.</li>
+<li><b>Augmentation values:</b> mosaic 0.5 (switched off for the last 10 epochs in Runs 1–2, the last 5 in the fine-tunes), hue 0.01, saturation 0.4, brightness 0.3, left–right flips 0.5, scale 0.25, shift 0.1; no rotation or mixup.</li>
+<li><b>Test objects:</b> 1,041 (the 2x2 test grids hold 61 objects and 3 empty filler cells).</li>
+<li><b>Still unrecorded:</b> the run and split behind the "before" AP of the label rules; they appear only in the Milestone 2 report.</li>
+</ul><p class="top"><a href="#contents">back to contents</a></p></section><section id="s12"><h2><span class="no">12</span>How YOLO turns an image into boxes</h2><p class="lede">What happens inside the detector between a 1,120-pixel grid going in and the final Object IDs and boxes coming out. Part of the Milestone 2 lessons: how every photo got its box · the five model runs.</p>
+<div class="figure" role="img" aria-label="Flow diagram of how YOLO turns an image into boxes"><svg viewBox="0 0 680 820" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="39" text-anchor="middle" dominant-baseline="central">Input: a 5x5 grid</text><text class="ts" x="340" y="58" text-anchor="middle" dominant-baseline="central">1,120 × 1,120 pixels × 3 colours</text></g>
+<path d="M340 76 L340 104" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-teal"><rect x="140" y="106" width="400" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="126" text-anchor="middle" dominant-baseline="central">Backbone: find patterns</text><text class="ts" x="340" y="146" text-anchor="middle" dominant-baseline="central">edges → textures and parts → whole objects</text><text class="ts" x="340" y="166" text-anchor="middle" dominant-baseline="central">learnt on COCO, then on your 73 objects</text></g>
+<path d="M340 190 L340 218" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-teal"><rect x="140" y="220" width="400" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="239" text-anchor="middle" dominant-baseline="central">Neck: mix detail and meaning</text><text class="ts" x="340" y="258" text-anchor="middle" dominant-baseline="central">fine maps learn what, coarse maps learn where</text></g>
+<path d="M340 276 L340 292 L135 292 L135 306" class="arr" marker-end="url(#arrow8)"/><path d="M340 292 L340 306" class="arr" marker-end="url(#arrow8)"/><path d="M340 292 L545 292 L545 306" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-purple"><rect x="50" y="308" width="170" height="84" rx="8" stroke-width="0.5"/><text class="th" x="135" y="328" text-anchor="middle" dominant-baseline="central">Fine map ÷8</text><text class="ts" x="135" y="348" text-anchor="middle" dominant-baseline="central">140 × 140 positions</text><text class="ts" x="135" y="368" text-anchor="middle" dominant-baseline="central">small objects</text></g>
+<g class="c-purple"><rect x="255" y="308" width="170" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="328" text-anchor="middle" dominant-baseline="central">Medium map ÷16</text><text class="ts" x="340" y="348" text-anchor="middle" dominant-baseline="central">70 × 70 positions</text><text class="ts" x="340" y="368" text-anchor="middle" dominant-baseline="central">medium objects</text></g>
+<g class="c-purple"><rect x="460" y="308" width="170" height="84" rx="8" stroke-width="0.5"/><text class="th" x="545" y="328" text-anchor="middle" dominant-baseline="central">Coarse map ÷32</text><text class="ts" x="545" y="348" text-anchor="middle" dominant-baseline="central">35 × 35 positions</text><text class="ts" x="545" y="368" text-anchor="middle" dominant-baseline="central">large objects</text></g>
+<path d="M135 392 L135 408 L340 408 L340 422" class="arr" marker-end="url(#arrow8)"/><path d="M340 392 L340 422" class="arr" marker-end="url(#arrow8)"/><path d="M545 392 L545 408 L340 408" class="arr"/>
+<g class="c-purple"><rect x="140" y="424" width="400" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="444" text-anchor="middle" dominant-baseline="central">25,725 candidate boxes</text><text class="ts" x="340" y="464" text-anchor="middle" dominant-baseline="central">each: 4 box edges + a score for each of 73 objects</text><text class="ts" x="340" y="484" text-anchor="middle" dominant-baseline="central">almost all say: nothing here</text></g>
+<path d="M340 508 L340 536" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-gray"><rect x="140" y="538" width="400" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="557" text-anchor="middle" dominant-baseline="central">Keep confidence ≥ 0.10</text><text class="ts" x="340" y="576" text-anchor="middle" dominant-baseline="central">threshold chosen on validation</text></g>
+<path d="M340 594 L340 622" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-gray"><rect x="140" y="624" width="400" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="643" text-anchor="middle" dominant-baseline="central">Remove duplicates</text><text class="ts" x="340" y="662" text-anchor="middle" dominant-baseline="central">YOLOv8: NMS · YOLO26: one prediction per object</text></g>
+<path d="M340 680 L340 708" class="arr" marker-end="url(#arrow8)"/>
+<g class="c-teal"><rect x="140" y="710" width="400" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="730" text-anchor="middle" dominant-baseline="central">Your rule: one box per 224-px cell</text><text class="ts" x="340" y="750" text-anchor="middle" dominant-baseline="central">a grid cell holds one object, so keep the best</text><text class="ts" x="340" y="770" text-anchor="middle" dominant-baseline="central">→ final Object IDs and boxes</text></g>
+</svg></div>
+<div class="key"><span><i class="sw t"></i>the network</span><span><i class="sw p"></i>predictions</span><span><i class="sw g"></i>input and filtering</span></div>
+<h3>Step by step</h3>
+<ul>
+<li><b>An image is numbers.</b> A 5x5 grid is 1,120 × 1,120 pixels × 3 colours: about 3.8 million values between 0 and 255.</li>
+<li><b>Backbone.</b> Stacked convolutions, small pattern detectors that slide over the image. Early layers find edges and colour changes, middle layers parts and textures, deep layers whole-object evidence. The map is shrunk as it goes deeper, so each position sees a larger area. COCO pretraining supplied this skill; training on the project data taught the 73 objects.</li>
+<li><b>Neck.</b> Passes information both ways between the shrunk maps, so every map knows both what is there and where.</li>
+<li><b>Heads.</b> Predict on three maps. At every position: four box edges (distances from that position) and a score for each of the 73 objects.</li>
+<li><b>Filtering.</b> Keep candidates with confidence of at least 0.10, remove duplicates, then apply the project's rule of one box per 224-pixel cell.</li>
+</ul>
+<h3>The three maps for a 1,120-pixel input</h3>
+<div class="tablewrap"><table>
+<tr><th>Map</th><th class="n">Each position covers</th><th class="n">Positions</th><th>Best for</th></tr>
+<tr><td>fine (÷8)</td><td class="n">8 × 8 px</td><td class="n">140 × 140 = 19,600</td><td>small objects</td></tr>
+<tr><td>medium (÷16)</td><td class="n">16 × 16 px</td><td class="n">70 × 70 = 4,900</td><td>medium objects</td></tr>
+<tr><td>coarse (÷32)</td><td class="n">32 × 32 px</td><td class="n">35 × 35 = 1,225</td><td>large objects</td></tr>
+<tr class="sel"><td>total</td><td></td><td class="n">25,725 candidates</td><td></td></tr>
+</table></div>
+<p>One 224-pixel photo covers 28 × 28 positions on the fine map but only 7 × 7 on the coarse one, which is why very small objects depend on the fine map.</p>
+<h3>Removing duplicates</h3>
+<p>Neighbouring positions often detect the same object. YOLOv8 removes the extras afterwards with non-maximum suppression (NMS): keep the highest-scoring box and delete weaker boxes that overlap it. YOLO26 is designed to make one prediction per object, so it does not need NMS. On top of either, the project keeps only the best box in each 224-pixel cell, because a grid cell holds exactly one object.</p>
+<h3>How training fits in</h3>
+<p>For each training image, the true boxes decide which positions are responsible for each object. The model is penalised for box error (poor overlap with the true box, measured with IoU) and class error (wrong object scores); each batch of 4 nudges the weights to reduce both, 375 times per epoch.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s13"><h2><span class="no">13</span>Measuring a detector</h2><p class="lede">How every score in the project is built, from one question asked about every box: is this box right? From IoU to precision and recall, AP, mAP and the project's own grid measures.</p>
+
+<h3>1. IoU: how well two boxes overlap</h3>
+<p>IoU (intersection over union) = the area two boxes share ÷ the total area they cover together. 1.0 is a perfect match; 0 means no overlap. Each example below uses a true box of 100 × 100 px (solid) and a predicted box (dashed); the shaded area is what they share.</p>
+<div class="figure" role="img" aria-label="Three IoU examples: shifted box 0.67, oversized box 0.69, paper-only tissue box 0.30"><svg viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg">
+<rect x="10" y="20" width="210" height="270" rx="12" class="panel"/><text class="tb" x="115" y="46" text-anchor="middle">Shifted 20 px</text><rect x="76.0" y="70.0" width="104.0" height="130.0" class="shared"/><rect x="50.0" y="70.0" width="130.0" height="130.0" class="truebox"/><rect x="76.0" y="70.0" width="130.0" height="130.0" class="predbox"/><text class="tb" x="115" y="250" text-anchor="middle">IoU = 0.67</text><text class="tl" x="115" y="270" text-anchor="middle">8,000 ÷ 12,000</text>
+<rect x="235" y="20" width="210" height="270" rx="12" class="panel"/><text class="tb" x="340" y="46" text-anchor="middle">20% too big</text><rect x="275.0" y="70.0" width="130.0" height="130.0" class="shared"/><rect x="275.0" y="70.0" width="130.0" height="130.0" class="truebox"/><rect x="275.0" y="70.0" width="156.0" height="156.0" class="predbox"/><text class="tb" x="340" y="250" text-anchor="middle">IoU = 0.69</text><text class="tl" x="340" y="270" text-anchor="middle">10,000 ÷ 14,400</text>
+<rect x="460" y="20" width="210" height="270" rx="12" class="panel"/><text class="tb" x="565" y="46" text-anchor="middle">Paper only (tissue)</text><rect x="500.0" y="70.0" width="130.0" height="39.0" class="shared"/><rect x="500.0" y="70.0" width="130.0" height="130.0" class="truebox"/><rect x="500.0" y="70.0" width="130.0" height="39.0" class="predbox"/><text class="tb" x="565" y="250" text-anchor="middle">IoU = 0.30</text><text class="tl" x="565" y="270" text-anchor="middle">3,000 ÷ 10,000</text>
+</svg></div>
+<p>A box that is only "a bit off" already falls to about 0.67. The third case is the tissue box from the label audit: a box around only the paper, against a true box around the whole tissue box, scores 0.30, below the 0.5 needed to count.</p>
+
+<h3>2. When a prediction is correct</h3>
+<p>A predicted box is correct when it names the right Object ID and its IoU with the true box is at least 0.5. Every box and every true object then falls into one outcome:</p>
+<div class="tablewrap"><table>
+<tr><th>Outcome</th><th>Meaning</th></tr>
+<tr><td>correct</td><td>right ID, IoU ≥ 0.5</td></tr>
+<tr><td>box off</td><td>right ID, IoU below 0.5</td></tr>
+<tr><td>wrong ID</td><td>a box in the right place naming the wrong object</td></tr>
+<tr><td>missed</td><td>a true object with no box</td></tr>
+<tr><td>extra</td><td>a box where there is no object</td></tr>
+</table></div>
+
+<h3>3. Precision and recall</h3>
+<p><b>Recall</b> = correct ÷ all true objects: of everything that was there, how much was found. <b>Precision</b> = correct ÷ all boxes drawn: of everything claimed, how much was true. The bars show the selected model on the 72 test grids.</p>
+<div class="figure" role="img" aria-label="Recall and precision bars for the selected model on the test grids"><svg viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg"><text class="tb" x="10" y="38">True</text><text class="tl" x="10" y="56">objects</text><rect x="90" y="24" width="514.3" height="36" rx="4" class="bar-ok"/><rect x="604.3" y="24" width="8.6" height="36" class="bar-bad"/><rect x="612.9" y="24" width="37.1" height="36" rx="4" class="bar-g"/><text class="tl" x="98" y="78">956 correct · 16 wrong ID · 69 missed = 1,041</text><text class="tb" x="98" y="98">recall = 956 ÷ 1,041 = 0.918</text><text class="tb" x="10" y="148">Boxes</text><text class="tl" x="10" y="166">drawn</text><rect x="90" y="134" width="514.3" height="36" rx="4" class="bar-ok"/><rect x="604.3" y="134" width="38.2" height="36" rx="4" class="bar-bad"/><text class="tl" x="98" y="188">956 correct · about 71 wrong in some way ≈ 1,027 boxes</text><text class="tb" x="98" y="208">precision = 956 ÷ about 1,027 = 0.931</text></svg></div>
+<p>The 956 correct objects follow from 1,041 − 16 wrong IDs − 69 misses. The number of boxes drawn (about 1,027) is derived from the precision, so the "about 71" is approximate. Precision and recall pull against each other through the confidence threshold: a lower threshold draws more boxes, finding more objects (recall up) but adding more mistakes (precision down). The project's 0.10 was the balance chosen on validation.</p>
+
+<h3>4. AP: one object, every threshold</h3>
+<p>For one object, sort all its predicted boxes by confidence, walk down the list noting precision and recall after each box, and plot precision against recall. AP (average precision) is the area under that curve, from 0 to 1. AP = 1.0 means every correct box ranked above every wrong one, so the object is handled perfectly at any threshold. The tissue box went from 0.30 to 0.995 after its label rule was fixed.</p>
+
+<h3>5. mAP: the average over all 73 objects</h3>
+<div class="tablewrap"><table>
+<tr><th>Score</th><th>A box counts when</th><th class="n">Selected model, test</th></tr>
+<tr><td>mAP@0.5</td><td>IoU ≥ 0.5: found, roughly in place</td><td class="n">0.947</td></tr>
+<tr><td>mAP@0.5:0.95</td><td>averaged over 10 cut-offs 0.50, 0.55 … 0.95: rewards tight boxes</td><td class="n">0.875</td></tr>
+</table></div>
+<p>Each object counts equally in the average, however many photos it has. The gap between the two says the model nearly always finds the object, but its boxes are not always tight; that is why the model was chosen on the stricter score.</p>
+
+<h3>6. The project's grid measures</h3>
+<div class="tablewrap"><table>
+<tr><th>Measure</th><th>Meaning</th><th class="n">Test</th></tr>
+<tr><td>Objects found</td><td>the recall: correct objects ÷ all objects</td><td class="n">91.8%</td></tr>
+<tr><td>Grids fully correct</td><td>every object right and no extra box</td><td class="n">34.7% (25 of 72)</td></tr>
+<tr><td>95% confidence interval</td><td>the plausible range for the fully-correct rate with only 72 grids</td><td class="n">23.6–45.8%</td></tr>
+</table></div>
+<p>One slip spoils a whole grid, so the fully-correct rate falls from 87.5% on 2x2 grids to 7.1% on 5x5, while objects found stays around 90–98% at every size. With 72 grids, each grid moves the rate by about 1.4 points, which is why the interval is wide.</p>
+
+<h3>In one sentence</h3>
+<p>IoU judges one box; precision and recall judge all boxes at one threshold; AP judges one object across every threshold; mAP averages AP over the 73 objects; and the fully-correct rate is the strictest test, a whole grid without a single slip.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s14"><h2><span class="no">14</span>What the model gets wrong, and why</h2><p class="lede">The selected model (Run 5) on the 72 test grids: where it is strong, the six reasons behind its errors, why whole-grid accuracy falls so fast, and what that led to.</p>
+
+<h3>The scorecard</h3>
+<div class="tablewrap"><table>
+<tr><th>Measure</th><th class="n">Result</th></tr>
+<tr><td>Objects found (recall)</td><td class="n">91.8%</td></tr>
+<tr><td>mAP@0.5 / mAP@0.5:0.95</td><td class="n">0.947 / 0.875</td></tr>
+<tr><td>Precision</td><td class="n">0.931</td></tr>
+<tr><td>Single photos</td><td class="n">14 of 14</td></tr>
+<tr><td>Objects with AP ≥ 0.95</td><td class="n">48 of 73</td></tr>
+<tr><td>Grids fully correct</td><td class="n">34.7% (25 of 72)</td></tr>
+</table></div>
+<p>The model is strong at finding and naming objects, weaker at getting a whole grid perfect, and most of its trouble comes from a few kinds of object and photo.</p>
+
+<h3>Missing is the main problem</h3>
+<div class="figure" role="img" aria-label="Of 85 errors, 69 were misses and 16 wrong IDs"><svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg"><rect x="90" y="24" width="454.6" height="40" rx="4" class="bar-g"/><rect x="544.6" y="24" width="105.4" height="40" rx="4" class="bar-bad"/><text class="tb" x="10" y="49">85 errors</text><text class="tb" x="317.3" y="49" text-anchor="middle">69 missed</text><text class="tb" x="597.3" y="49" text-anchor="middle">16</text><text class="tl" x="90" y="90">no correct box at all</text><text class="tl" x="650.0" y="90" text-anchor="end">wrong ID</text></svg></div>
+<p>Misses outnumber confusions about four to one: the model mostly knows what things are; its weakness is noticing them at all.</p>
+
+<h3>The six reasons for errors</h3>
+<div class="tablewrap"><table>
+<tr><th>Reason</th><th>Example from the project</th></tr>
+<tr><td><b>Tiny objects</b></td><td>a pencil case covering 1.3% of its photo; phones and the mouth-guard case missed when small</td></tr>
+<tr><td><b>Just below the threshold</b></td><td>a mouth-guard case seen at confidence 0.0996 against a threshold of 0.10</td></tr>
+<tr><td><b>Look-alikes</b></td><td>paddle (AP 0.59) vs tennis racket, card wallet (0.62) vs men's wallet, mouth-guard case (0.77), sunglasses (0.79); the three watches</td></tr>
+<tr><td><b>Partial labels</b></td><td>a watch judged "box off" at IoU 0.37 because its label covered only part of the object</td></tr>
+<tr><td><b>Weak extras</b></td><td>a card wallet "seen" at 0.15 in an empty background area</td></tr>
+<tr><td><b>Co-occurring objects</b></td><td>apple and tissue box, tennis ball and mouth-guard case often photographed together, so the model can learn the company an object keeps (shortcut learning)</td></tr>
+</table></div>
+<p>Two situations were never in the training data: <b>rotation</b> (a photo detected upright at 0.54 was missed entirely when turned 90°) and <b>heavy degradation</b> (quarter resolution, dark and JPEG quality 20 together: mAP@0.5 0.428).</p>
+
+<h3>Why "fully correct" falls so fast</h3>
+<div class="figure" role="img" aria-label="Objects found stays near 90 to 98 percent at every grid size while fully correct falls from 87.5 to 7.1 percent"><svg viewBox="0 0 680 330" xmlns="http://www.w3.org/2000/svg"><line x1="80" x2="620" y1="260.0" y2="260.0" stroke="var(--rule)" stroke-width="1"/><text class="tl" x="70" y="264.0" text-anchor="end">0%</text><line x1="80" x2="620" y1="205.0" y2="205.0" stroke="var(--rule)" stroke-width="1"/><text class="tl" x="70" y="209.0" text-anchor="end">25%</text><line x1="80" x2="620" y1="150.0" y2="150.0" stroke="var(--rule)" stroke-width="1"/><text class="tl" x="70" y="154.0" text-anchor="end">50%</text><line x1="80" x2="620" y1="95.0" y2="95.0" stroke="var(--rule)" stroke-width="1"/><text class="tl" x="70" y="99.0" text-anchor="end">75%</text><line x1="80" x2="620" y1="40.0" y2="40.0" stroke="var(--rule)" stroke-width="1"/><text class="tl" x="70" y="44.0" text-anchor="end">100%</text><rect x="98" y="43.5" width="32" height="216.5" rx="3" class="bar-ok"/><rect x="136" y="67.5" width="32" height="192.5" rx="3" class="bar-bad"/><text class="tl" x="114" y="37.5" text-anchor="middle">98.4</text><text class="tl" x="152" y="61.5" text-anchor="middle">87.5</text><text class="tb" x="133" y="282" text-anchor="middle">2x2</text><text class="tl" x="133" y="300" text-anchor="middle">4 objects</text><rect x="206" y="62.7" width="32" height="197.3" rx="3" class="bar-ok"/><rect x="244" y="181.5" width="32" height="78.5" rx="3" class="bar-bad"/><text class="tl" x="222" y="56.7" text-anchor="middle">89.7</text><text class="tl" x="260" y="175.5" text-anchor="middle">35.7</text><text class="tb" x="241" y="282" text-anchor="middle">3x3</text><text class="tl" x="241" y="300" text-anchor="middle">9 objects</text><rect x="314" y="59.6" width="32" height="200.4" rx="3" class="bar-ok"/><rect x="352" y="228.5" width="32" height="31.5" rx="3" class="bar-bad"/><text class="tl" x="330" y="53.6" text-anchor="middle">91.1</text><text class="tl" x="368" y="222.5" text-anchor="middle">14.3</text><text class="tb" x="349" y="282" text-anchor="middle">4x4</text><text class="tl" x="349" y="300" text-anchor="middle">16 objects</text><rect x="422" y="58.0" width="32" height="202.0" rx="3" class="bar-ok"/><rect x="460" y="212.9" width="32" height="47.1" rx="3" class="bar-bad"/><text class="tl" x="438" y="52.0" text-anchor="middle">91.8</text><text class="tl" x="476" y="206.9" text-anchor="middle">21.4</text><text class="tb" x="457" y="282" text-anchor="middle">5x4</text><text class="tl" x="457" y="300" text-anchor="middle">20 objects</text><rect x="530" y="57.6" width="32" height="202.4" rx="3" class="bar-ok"/><rect x="568" y="244.4" width="32" height="15.6" rx="3" class="bar-bad"/><text class="tl" x="546" y="51.6" text-anchor="middle">92</text><text class="tl" x="584" y="238.4" text-anchor="middle">7.1</text><text class="tb" x="565" y="282" text-anchor="middle">5x5</text><text class="tl" x="565" y="300" text-anchor="middle">25 objects</text><polyline fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="5 4" points="152.0,102.4 260.0,156.1 368.0,202.1 476.0,218.5 584.0,232.6"/><circle cx="152.0" cy="102.4" r="3.5" fill="var(--line)"/><circle cx="260.0" cy="156.1" r="3.5" fill="var(--line)"/><circle cx="368.0" cy="202.1" r="3.5" fill="var(--line)"/><circle cx="476.0" cy="218.5" r="3.5" fill="var(--line)"/><circle cx="584.0" cy="232.6" r="3.5" fill="var(--line)"/></svg></div>
+<div class="key"><span><i class="sw t"></i>objects found</span><span><i class="sw p"></i>grids fully correct</span><span>- - - if each object were right 92% of the time, independently</span></div>
+<p>A grid is fully correct only if every object in it is right, so errors compound: at 92% per object, 4 objects are all right about 72% of the time (0.92⁴) but 25 objects only about 12% (0.92²⁵). The real 2x2 rate is higher and the 5x5 rate lower than that line, because errors are not independent: small grids hold larger, easier objects, while big grids concentrate the hard cases.</p>
+
+<h3>What it led to in Milestone 3</h3>
+<div class="tablewrap"><table>
+<tr><th>Weakness</th><th>Response</th></tr>
+<tr><td>tiny objects</td><td>higher input resolution: 1,280 and 1,600 px</td></tr>
+<tr><td>rotation</td><td>training photos turned 90°, 180° and 270°</td></tr>
+<tr><td>objects only seen in grids</td><td>scattered layouts on real backgrounds, and cut-outs made with SAM</td></tr>
+<tr><td>look-alikes</td><td>more examples of the weakest objects and look-alike groups</td></tr>
+<tr><td>partial labels</td><td>one rule for all objects, with every usable box checked by a person</td></tr>
+</table></div>
+
+<h3>In one sentence</h3>
+<p>The Milestone 2 model names objects well but misses small, rotated, look-alike or badly photographed ones, about four misses for every confusion, and because errors compound, a whole 5x5 grid comes out perfect only 7% of the time.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s15"><h2><span class="no">15</span>The EYE</h2><p class="lede">Why the EYE was built, how its parts work together, why it judges exactly like the evaluation, how it explains each miss, and what it revealed.</p>
+<h3>Why it exists</h3>
+<p>A test score says how often the model is right, not why it fails on a particular object. The EYE shows the model working on a grid, draws every box and explains each object's result in plain words.</p>
+<h3>How the parts fit together</h3>
+<div class="figure" role="img" aria-label="Diagram of the EYE: browser, page, server, detector and explanation"><svg viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow11" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="70" rx="8" stroke-width="0.5"/><text class="th" x="340" y="40" text-anchor="middle" dominant-baseline="central">You, in the browser</text><text class="ts" x="340" y="60" text-anchor="middle" dominant-baseline="central">127.0.0.1:7860</text><text class="ts" x="340" y="80" text-anchor="middle" dominant-baseline="central">press RANDOM, then DETECT</text></g>
+<path d="M300 90 L300 128" class="arr" marker-end="url(#arrow11)"/><path d="M380 128 L380 92" class="arr" marker-end="url(#arrow11)"/>
+<g class="c-teal"><rect x="40" y="130" width="600" height="104" rx="8" stroke-width="0.5"/><text class="th" x="340" y="150" text-anchor="middle" dominant-baseline="central">The page (HTML and JavaScript)</text><text class="ts" x="340" y="170" text-anchor="middle" dominant-baseline="central">draws the eye, the controls and the report cards</text><text class="ts" x="340" y="190" text-anchor="middle" dominant-baseline="central">asks the server: /api/config · /api/grid · /api/detect · /api/upload</text><text class="ts" x="340" y="210" text-anchor="middle" dominant-baseline="central">shows every box and the sentence explaining it</text></g>
+<path d="M300 234 L300 272" class="arr" marker-end="url(#arrow11)"/><path d="M380 272 L380 236" class="arr" marker-end="url(#arrow11)"/>
+<g class="c-teal"><rect x="40" y="274" width="600" height="104" rx="8" stroke-width="0.5"/><text class="th" x="340" y="294" text-anchor="middle" dominant-baseline="central">The server (Python, same file)</text><text class="ts" x="340" y="314" text-anchor="middle" dominant-baseline="central">loads the selected model (Run 5) through Ultralytics</text><text class="ts" x="340" y="334" text-anchor="middle" dominant-baseline="central">builds grids from held-out, human-checked test photos</text><text class="ts" x="340" y="354" text-anchor="middle" dominant-baseline="central">applies the evaluation's rules, then explains each object</text></g>
+<path d="M190 378 L190 416" class="arr" marker-end="url(#arrow11)"/><path d="M490 378 L490 416" class="arr" marker-end="url(#arrow11)"/>
+<g class="c-purple"><rect x="40" y="418" width="290" height="104" rx="8" stroke-width="0.5"/><text class="th" x="185" y="438" text-anchor="middle" dominant-baseline="central">The detector</text><text class="ts" x="185" y="458" text-anchor="middle" dominant-baseline="central">threshold 0.10</text><text class="ts" x="185" y="478" text-anchor="middle" dominant-baseline="central">one box per 224-px cell</text><text class="ts" x="185" y="498" text-anchor="middle" dominant-baseline="central">keeps weaker candidates too</text></g>
+<g class="c-purple"><rect x="350" y="418" width="290" height="104" rx="8" stroke-width="0.5"/><text class="th" x="495" y="438" text-anchor="middle" dominant-baseline="central">The explanation</text><text class="ts" x="495" y="458" text-anchor="middle" dominant-baseline="central">correct · box off · wrong ID</text><text class="ts" x="495" y="478" text-anchor="middle" dominant-baseline="central">missed: seen below the threshold</text><text class="ts" x="495" y="498" text-anchor="middle" dominant-baseline="central">missed: not seen at all</text></g>
+</svg></div>
+<p>Everything is one Python file (<code>m2_eye_app.py</code> in Milestone 2) that runs a small local web server; nothing beyond Python and the model needs installing.</p>
+<h3>It judges exactly like the evaluation</h3>
+<ul>
+<li>Random grids use held-out test photos only, whose true boxes were all checked by a person.</li>
+<li>It uses the same model, the same confidence threshold, one box per 224-pixel cell, and IoU ≥ 0.5 for "correct".</li>
+<li>So a miss shown in the EYE is a miss the report counts too.</li>
+</ul>
+<h3>How it explains a miss</h3>
+<p>The model produces thousands of candidate boxes, most below the threshold. The final result keeps only the confident ones, but the EYE also looks at the weaker candidates to explain what happened to each true object.</p>
+<div class="tablewrap"><table>
+<tr><th>What the EYE finds</th><th>What it says</th></tr>
+<tr><td>right ID, IoU ≥ 0.5, above the threshold</td><td>correct</td></tr>
+<tr><td>right ID, IoU below 0.5</td><td>box off, with the overlap value</td></tr>
+<tr><td>a box in the right place naming another object</td><td>wrong ID, naming the look-alike</td></tr>
+<tr><td>the right object only below the threshold</td><td>missed: for example "seen at 0.0996, below the threshold 0.1000"</td></tr>
+<tr><td>no candidate at all</td><td>missed: not seen</td></tr>
+</table></div>
+<h3>What you can do with it (Milestone 2 version)</h3>
+<div class="tablewrap"><table>
+<tr><th>Part</th><th>What it does</th></tr>
+<tr><td>Eyebrow controls</td><td>grid size, object mix (for example look-alikes), image conditions, a seed to repeat a grid, the model, the threshold</td></tr>
+<tr><td>Left dock</td><td>upload a photo, random grid, stress test over many grids, About</td></tr>
+<tr><td>Iris ring</td><td>the DETECT button; afterwards a score ring, one segment per object coloured by result</td></tr>
+<tr><td>Report cards</td><td>score; results (one sentence per object, + for details); inspect (each object beside training photos of the predicted and true object); threshold sweep</td></tr>
+<tr><td>Right dock</td><td>files (PNG, CSV, JSON), snapshot, hover titles, light/dark, Calm mode</td></tr>
+<tr><td>Large view and "How was I built?"</td><td>close inspection, and the project told as a building site in ten stations</td></tr>
+</table></div>
+<h3>What it revealed</h3>
+<p>Most of the concrete failures in <a href="#s14">lesson 14</a> were found by using the EYE: the missed rotated photo, the pencil case covering 1.3% of its photo, the mouth-guard case at 0.0996, the watch box at IoU 0.37 caused by a partial label, and the card wallet seen on an empty background. It became the project's debugging tool, and those observations shaped the Milestone 3 extension, where the EYE grew into v2, v3 and on to v3.5.</p>
+<h3>In one sentence</h3>
+<p>The EYE is a one-file local web app that runs the selected detector on held-out, human-checked test photos with exactly the evaluation's rules, and explains every miss in plain words.</p><p class="top"><a href="#contents">back to contents</a></p></section><h1 class="part" id="milestone-3">Milestone 3</h1><section id="s16"><h2><span class="no">16</span>The diagnosis</h2><p class="lede">Before training anything new, a script measured exactly what was wrong with the Milestone 2 model, on validation only, and tested the cheap fixes first.</p>
+<h3>Why validation only</h3>
+<p><code>m2_diagnose.py</code> ran the Milestone 2 model on the 68 validation grids (972 objects) and classified every failure. The test set stayed untouched: diagnosing on test and fixing what was found would quietly tune the new model to the test and make its final score dishonest.</p>
+<h3>Upright grids were already good</h3>
+<div class="tablewrap"><table>
+<tr><th>Measure (upright validation grids)</th><th class="n">Milestone 2 model</th></tr>
+<tr><td>Recall / precision</td><td class="n">0.961 / 0.972</td></tr>
+<tr><td>Wrong IDs</td><td class="n">5</td></tr>
+<tr><td>Grids fully correct</td><td class="n">61.8%</td></tr>
+<tr><td>mAP@0.5 / mAP@0.5:0.95</td><td class="n">0.971 / 0.925</td></tr>
+</table></div>
+<h3>Rotation was the big weakness</h3>
+<div class="figure" role="img" aria-label="Recall by rotation: upright 0.961, 90 degrees 0.771, 180 degrees 0.830, 270 degrees 0.762"><svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg"><line x1="90" x2="650" y1="230.0" y2="230.0" stroke="var(--rule)"/><text class="tl" x="80" y="234.0" text-anchor="end">0.5</text><line x1="90" x2="650" y1="190.0" y2="190.0" stroke="var(--rule)"/><text class="tl" x="80" y="194.0" text-anchor="end">0.6</text><line x1="90" x2="650" y1="150.0" y2="150.0" stroke="var(--rule)"/><text class="tl" x="80" y="154.0" text-anchor="end">0.7</text><line x1="90" x2="650" y1="110.0" y2="110.0" stroke="var(--rule)"/><text class="tl" x="80" y="114.0" text-anchor="end">0.8</text><line x1="90" x2="650" y1="70.0" y2="70.0" stroke="var(--rule)"/><text class="tl" x="80" y="74.0" text-anchor="end">0.9</text><line x1="90" x2="650" y1="30.0" y2="30.0" stroke="var(--rule)"/><text class="tl" x="80" y="34.0" text-anchor="end">1.0</text><rect x="110" y="45.6" width="90" height="184.4" rx="4" class="bar-ok"/><text class="tb" x="155.0" y="37.6" text-anchor="middle">0.961</text><text class="tb" x="155.0" y="252" text-anchor="middle">upright</text><text class="tl" x="155.0" y="270" text-anchor="middle">5 wrong IDs</text><rect x="250" y="121.6" width="90" height="108.4" rx="4" class="bar-bad"/><text class="tb" x="295.0" y="113.6" text-anchor="middle">0.771</text><text class="tb" x="295.0" y="252" text-anchor="middle">90°</text><text class="tl" x="295.0" y="270" text-anchor="middle">70 wrong IDs</text><rect x="390" y="98.0" width="90" height="132.0" rx="4" class="bar-bad"/><text class="tb" x="435.0" y="90.0" text-anchor="middle">0.830</text><text class="tb" x="435.0" y="252" text-anchor="middle">180°</text><text class="tl" x="435.0" y="270" text-anchor="middle">30 wrong IDs</text><rect x="530" y="125.2" width="90" height="104.8" rx="4" class="bar-bad"/><text class="tb" x="575.0" y="117.2" text-anchor="middle">0.762</text><text class="tb" x="575.0" y="252" text-anchor="middle">270°</text><text class="tl" x="575.0" y="270" text-anchor="middle">70 wrong IDs</text><text class="tl" x="30" y="20">recall</text></svg></div>
+<p>Turning every validation photo sideways cost almost 20 points of recall, and wrong IDs rose from 5 to 70. The training data contained no rotated photos, so the model learned objects only the right way up. A likely reason 180° hurts less (an interpretation, not measured): upside down keeps an object's outline proportions, while sideways turns tall shapes into wide ones.</p>
+<h3>Why upright objects were still missed</h3>
+<p>Recall 0.961 means about 38 of the 972 upright objects were missed. Each got a cause:</p>
+<div class="tablewrap"><table>
+<tr><th>Cause</th><th class="n">Count</th><th>Meaning</th></tr>
+<tr><td>Box placed off</td><td class="n">11</td><td>found and named right, but overlapping the truth by less than half, often because the label was partial or inconsistent</td></tr>
+<tr><td>Not seen</td><td class="n">10</td><td>no candidate at all; 5 were very small objects</td></tr>
+<tr><td>Below the threshold</td><td class="n">8</td><td>seen with confidence under 0.10</td></tr>
+<tr><td>Wrong ID</td><td class="n">5</td><td>named as another object; 1 was a look-alike</td></tr>
+<tr><td>Removed by the cell rule</td><td class="n">4</td><td>correct, but another box in the same cell scored higher</td></tr>
+</table></div>
+<p>The largest cause was a labelling problem, not a model problem. The ten weakest validation objects: OBJ061, OBJ068, OBJ003, OBJ065, OBJ048, OBJ042, OBJ020, OBJ070, OBJ034, OBJ014.</p>
+<h3>The cheap fixes, tested first</h3>
+<div class="tablewrap"><table>
+<tr><th>Trick</th><th>What it does</th><th>Result</th><th>Used</th></tr>
+<tr><td>Fill empty cells</td><td>take the best candidate in an empty grid cell, even below the threshold</td><td>recall +0.4 points, precision −0.7, 2 more wrong IDs</td><td>no</td></tr>
+<tr><td>Test-time augmentation</td><td>also predict on flipped and rescaled copies, then combine</td><td>fully correct 62% → 54%</td><td>no</td></tr>
+<tr><td>Larger input, no retraining</td><td>run at 1,280 or 1,600 px instead of 1,120</td><td>worse: the model learned objects at the 1,120 size</td><td>no</td></tr>
+</table></div>
+<h3>The decisions</h3>
+<ul>
+<li>Retrain at a higher resolution, 1,280 px, so the model learns small objects at that size.</li>
+<li>Teach rotation with training photos turned 90°, 180° and 270°.</li>
+<li>Fix the labels at the source: a person checks every usable box.</li>
+</ul><p class="top"><a href="#contents">back to contents</a></p></section><section id="s17"><h2><span class="no">17</span>The label check</h2><p class="lede">How every usable box came to be checked by a person, under one rule for all 73 objects, without touching the original Milestone 2 labels.</p>
+<h3>Why it was needed</h3>
+<ul><li>4,660 Milestone 2 boxes had never been seen by a person; trusted at about 97–99%, that still meant dozens of wrong boxes.</li>
+<li>The largest cause of upright misses in the diagnosis was "box placed off" (11 of 38), often because the label was partial or inconsistent.</li></ul>
+<h3>The whole check</h3>
+<div class="figure" role="img" aria-label="Flow of the label check from 6,936 photos to 6,881 checked boxes"><svg viewBox="0 0 680 820" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow13" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="39" text-anchor="middle" dominant-baseline="central">6,936 photos</text><text class="ts" x="340" y="58" text-anchor="middle" dominant-baseline="central">everything after Milestone 1 cleaning</text></g>
+<path d="M340 76 L340 104" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-teal"><rect x="40" y="106" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="126" text-anchor="middle" dominant-baseline="central">prepare</text><text class="ts" x="340" y="145" text-anchor="middle" dominant-baseline="central">the Milestone 2 model gives a second opinion on every photo</text><text class="ts" x="340" y="164" text-anchor="middle" dominant-baseline="central">perceptual hashes find near-identical photos across splits</text></g>
+<path d="M340 190 L340 218" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-gray"><rect x="40" y="220" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="240" text-anchor="middle" dominant-baseline="central">One rule for all 73 objects</text><text class="ts" x="340" y="259" text-anchor="middle" dominant-baseline="central">box the whole object: every visible part, tight to its edges</text><text class="ts" x="340" y="278" text-anchor="middle" dominant-baseline="central">review in the browser (port 7870), every click saved at once</text></g>
+<path d="M340 304 L340 328" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-purple"><rect x="40" y="330" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="110" y="349" text-anchor="middle" dominant-baseline="central">Suspects</text><text class="ts" x="110" y="368" text-anchor="middle" dominant-baseline="central">13 photos</text></g><g class="c-purple"><rect x="192" y="330" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="262" y="349" text-anchor="middle" dominant-baseline="central">Sweep</text><text class="ts" x="262" y="368" text-anchor="middle" dominant-baseline="central">4,647 photos</text></g><g class="c-purple"><rect x="344" y="330" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="414" y="349" text-anchor="middle" dominant-baseline="central">Box size</text><text class="ts" x="414" y="368" text-anchor="middle" dominant-baseline="central">52 (24 in test)</text></g><g class="c-purple"><rect x="496" y="330" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="566" y="349" text-anchor="middle" dominant-baseline="central">Rules</text><text class="ts" x="566" y="368" text-anchor="middle" dominant-baseline="central">485 photos</text></g><g class="c-purple"><rect x="40" y="406" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="110" y="425" text-anchor="middle" dominant-baseline="central">Left out</text><text class="ts" x="110" y="444" text-anchor="middle" dominant-baseline="central">308 photos</text></g><g class="c-purple"><rect x="192" y="406" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="262" y="425" text-anchor="middle" dominant-baseline="central">Second objects</text><text class="ts" x="262" y="444" text-anchor="middle" dominant-baseline="central">15 photos</text></g><g class="c-purple"><rect x="344" y="406" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="414" y="425" text-anchor="middle" dominant-baseline="central">Duplicates</text><text class="ts" x="414" y="444" text-anchor="middle" dominant-baseline="central">183 pairs</text></g><g class="c-purple"><rect x="496" y="406" width="140" height="56" rx="8" stroke-width="0.5"/><text class="th" x="566" y="425" text-anchor="middle" dominant-baseline="central">To fix · Recent</text><text class="ts" x="566" y="444" text-anchor="middle" dominant-baseline="central">corrections</text></g>
+<path d="M110 482 L110 496 L570 496" class="arr"/><path d="M262 482 L262 496" class="arr"/><path d="M414 482 L414 496" class="arr"/><path d="M566 482 L566 496" class="arr"/><path d="M340 496 L340 514" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-teal"><rect x="40" y="516" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="536" text-anchor="middle" dominant-baseline="central">Two passes</text><text class="ts" x="340" y="555" text-anchor="middle" dominant-baseline="central">pass 1: every tab, all 4,647 in the sweep, then apply</text><text class="ts" x="340" y="574" text-anchor="middle" dominant-baseline="central">pass 2, with boost as second opinion: 200 decisions, 41 boxes changed</text></g>
+<path d="M340 600 L340 628" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-teal"><rect x="40" y="630" width="600" height="84" rx="8" stroke-width="0.5"/><text class="th" x="340" y="650" text-anchor="middle" dominant-baseline="central">apply → boxes_master_checked.csv</text><text class="ts" x="340" y="669" text-anchor="middle" dominant-baseline="central">decisions: 5,087 confirmed · 423 corrected · 14 excluded</text><text class="ts" x="340" y="688" text-anchor="middle" dominant-baseline="central">the original boxes_master.csv is never modified</text></g>
+<path d="M340 714 L340 742" class="arr" marker-end="url(#arrow13)"/>
+<g class="c-teal"><rect x="140" y="744" width="400" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="763" text-anchor="middle" dominant-baseline="central">6,881 boxes, every one checked</text><text class="ts" x="340" y="782" text-anchor="middle" dominant-baseline="central">6,936 − 14 excluded − 41 duplicates</text></g>
+</svg></div>
+<div class="key"><span><i class="sw t"></i>steps of the tool</span><span><i class="sw p"></i>review tabs, with what prepare found</span><span><i class="sw g"></i>inputs and rules</span></div>
+<h3>The review tabs</h3>
+<div class="tablewrap"><table>
+<tr><th>Tab</th><th>What it holds</th><th class="n">Found</th></tr>
+<tr><td>Suspects</td><td>the model strongly disagrees with the label</td><td class="n">13</td></tr>
+<tr><td>Sweep</td><td>every remaining never-checked box: 30 thumbnails per page, click the wrong ones, Enter marks the rest correct</td><td class="n">4,647</td></tr>
+<tr><td>To fix</td><td>boxes marked wrong, waiting for a corrected box</td><td class="n">–</td></tr>
+<tr><td>Box size</td><td>label much smaller or larger than the model's box: a likely partial or oversized label, in every split including test</td><td class="n">52 (24 test)</td></tr>
+<tr><td>Rules</td><td>every photo of the five rule objects</td><td class="n">485</td></tr>
+<tr><td>Left out</td><td>photos without a box, drawn by hand</td><td class="n">308</td></tr>
+<tr><td>Second objects</td><td>a second listed object visible in a photo</td><td class="n">15</td></tr>
+<tr><td>Duplicates</td><td>near-identical photo pairs across splits</td><td class="n">183 pairs</td></tr>
+<tr><td>↶ Recent</td><td>reopen and change any recent decision</td><td class="n">–</td></tr>
+</table></div>
+<p>Sweep 4,647 is the 4,660 never-checked boxes minus the 13 suspects; Left out 308 is exactly the photos that had no usable box in Milestone 2. Most box-size disagreements came from objects whose rules had already been fixed: sneakers (10), tissue (5), paddle (4), watch (3).</p>
+<h3>Duplicates</h3>
+<p>Of the 183 candidate pairs, 87 were test/train, 76 validation/train and 20 test/validation. For a real duplicate, the training or validation copy was dropped and the test photo kept, so the test set stays complete and training no longer holds a near-twin of a test photo: 41 copies were removed.</p>
+<h3>The result</h3>
+<div class="tablewrap"><table>
+<tr><th>Item</th><th class="n">Count</th></tr>
+<tr><td>Boxes checked by a person</td><td class="n">6,881 (all usable boxes)</td></tr>
+<tr><td>Excluded by a person</td><td class="n">14</td></tr>
+<tr><td>Near-duplicates removed</td><td class="n">41</td></tr>
+<tr><td>Decisions: confirmed / corrected / excluded</td><td class="n">5,087 / 423 / 14</td></tr>
+<tr><td>Second-object boxes (extra_boxes.csv)</td><td class="n">16</td></tr>
+<tr><td>Photos with a box</td><td class="n">6,628 → 6,881 (6,885 after pass 1)</td></tr>
+</table></div>
+<p>Because 17 test boxes changed in pass 2, the test answer key itself improved. Pass 2 ran after the first improved model (boost) had been trained and used boost as the second opinion; its corrections fed the second improved model (boost2). For a fair comparison, Milestone 3 re-scored the Milestone 2 model on the same checked boxes, and boost and boost2 were compared on the pass-2 truth, so every before-versus-after number compares models on identical truth.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s18"><h2><span class="no">18</span>The new training data</h2><p class="lede">How Milestone 3 rebuilt the training, validation and test images to teach rotation, scenes on any background, cut-out objects and empty scenes, and how its split compares with Milestone 2.</p>
+<h3>3,000 training images in four kinds</h3>
+<div class="figure" role="img" aria-label="3,000 training images: grid 1,264, scatter 990, cut-out 597, empty 149"><svg viewBox="0 0 680 130" xmlns="http://www.w3.org/2000/svg"><rect x="40.0" y="20" width="252.8" height="44" rx="4" class="bar-ok"/><text class="tb" x="166.4" y="47" text-anchor="middle">1,264</text><text class="tl" x="166.4" y="86" text-anchor="middle">Grid</text><rect x="292.8" y="20" width="198.0" height="44" rx="4" class="bar-bad"/><text class="tb" x="391.8" y="47" text-anchor="middle">990</text><text class="tl" x="391.8" y="86" text-anchor="middle">Scatter</text><rect x="490.8" y="20" width="119.4" height="44" rx="4" class="bar-g"/><text class="tb" x="550.5" y="47" text-anchor="middle">597</text><text class="tl" x="550.5" y="86" text-anchor="middle">Cut-out</text><rect x="610.2" y="20" width="29.8" height="44" rx="4" class="bar-ok"/><text class="tl" x="625.1" y="86" text-anchor="middle">Empty</text><text class="tl" x="625.1" y="104" text-anchor="middle">149</text></svg></div>
+<div class="tablewrap"><table>
+<tr><th>Kind</th><th class="n">Images</th><th class="n">Share</th><th>What it teaches</th></tr>
+<tr><td>Grid</td><td class="n">1,264</td><td class="n">42%</td><td>the original task, now with rotation: photos turned 90°, 180° or 270° (exact boxes), small tilts of ±10° (box re-fitted), whole grids rotated; ~15% single photos; half with look-alike groups</td></tr>
+<tr><td>Scatter</td><td class="n">990</td><td class="n">33%</td><td>objects at random sizes, angles and positions on real backgrounds (from the 385 background-only photos) or synthetic ones</td></tr>
+<tr><td>Cut-out</td><td class="n">597</td><td class="n">20%</td><td>SAM cut-outs at any angle, partly overlapping, on any background</td></tr>
+<tr><td>Empty</td><td class="n">149</td><td class="n">5%</td><td>"nothing here", against false positives on backgrounds</td></tr>
+</table></div>
+<p>Shares are derived from the counts. Across all kinds: low light, colour casts, blur, JPEG and noise; oversampling of look-alikes and the diagnosis's ten weakest objects; and the 16 second objects from the label check.</p>
+<h3>Rotating a box</h3>
+<p>For a 224-pixel photo turned 90° clockwise, a point (x, y) moves to (224 − y, x). A box from (50, 30) to (180, 200) becomes (24, 50) to (194, 180): exact arithmetic, like shifting a box into a grid cell.</p>
+<h3>SAM cut-outs</h3>
+<p>SAM (Segment Anything Model) outlines an object pixel by pixel when given a box around it. The resulting mask lifts the object out of its photo so it can be pasted anywhere. The training box stays the person-checked box: the mask only cuts the object out, so SAM never changed a label. A quality gate checked each mask against the agreed box for fill, spill and fit: 6,752 accepted, 133 rejected (1.9%). A sample sheet looked clean: the tissue box whole, the paddle alone, the watch with its strap.</p>
+<h3>Backgrounds and scale</h3>
+<p>Backgrounds were split into training and test backgrounds, so test scenes use backgrounds the model has never seen. Every image is built at the 1,120-pixel scale, then scaled to the training size, the same way for training, validation and the EYE, so an object keeps the same relative size everywhere.</p>
+<h3>Validation and test sets</h3>
+<div class="tablewrap"><table>
+<tr><th>Set</th><th class="n">Images</th><th>Contents</th></tr>
+<tr><td>Validation</td><td class="n">292</td><td>corrected validation grids, rotated copies, scattered and cut-out scenes on validation backgrounds</td></tr>
+<tr><td>Test: normal</td><td class="n">72</td><td>the original 72 test grids, with corrected truth</td></tr>
+<tr><td>Test: rotated</td><td class="n">216</td><td>each of the 72 grids at 90°, 180° and 270°</td></tr>
+<tr><td>Test: scattered</td><td class="n">104</td><td>test photos on unseen test backgrounds</td></tr>
+<tr><td>Test: cut-out</td><td class="n">104</td><td>cut-outs on unseen test backgrounds</td></tr>
+<tr><td>Test: single photos</td><td class="n">~1,040</td><td>every test photo on its own</td></tr>
+</table></div>
+<p>One test set per situation lets each effect be checked separately; above all, normal grids must not get worse while rotation and scenes improve.</p>
+<h3>Milestone 2 vs Milestone 3</h3>
+<div class="tablewrap"><table>
+<tr><th></th><th>Milestone 2</th><th>Milestone 3</th></tr>
+<tr><td>Photo split</td><td>70/15/15 per object, seed 42</td><td>the same split</td></tr>
+<tr><td>Photos with a usable box</td><td>6,628</td><td>6,881</td></tr>
+<tr><td>Checked by a person</td><td>1,968 (4,660 accepted by the vote)</td><td>all 6,881</td></tr>
+<tr><td>Removed</td><td>6 non-object photos, 308 without a box</td><td>6 non-object, 14 excluded by a person, 41 near-duplicates (training and validation copies only)</td></tr>
+<tr><td>Training images</td><td>1,500 grids (Run 5: 85% grids + 15% single photos)</td><td>3,000: grid 1,264, scatter 990, cut-out 597, empty 149</td></tr>
+<tr><td>Validation</td><td>68 grids (972 objects)</td><td>292 images</td></tr>
+<tr><td>Test</td><td>72 grids (+ 84 images of other input types)</td><td>normal 72, rotated 216, scattered 104, cut-out 104, single photos ~1,040</td></tr>
+<tr><td>Input size</td><td>1,120 px</td><td>1,280 px (boost), 1,600 px (boost2)</td></tr>
+</table></div>
+<p>The test photos are the same in both milestones; only their answer key improved. To compare fairly, Milestone 3 re-scored the Milestone 2 model on the corrected truth and on every new test set. The per-split photo counts for Milestone 3 are not in the records.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s19"><h2><span class="no">19</span>Training boost and boost2</h2><p class="lede">How the two improved models were trained: both fine-tuned from the Milestone 2 model, with the first one helping to improve the labels for the second.</p>
+<h3>The order of events</h3>
+<div class="figure" role="img" aria-label="Run 5 to pass 1 to boost to pass 2 to boost2"><svg viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow15" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-gray"><rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340" y="39" text-anchor="middle" dominant-baseline="central">Run 5 · the Milestone 2 model</text><text class="ts" x="340" y="58" text-anchor="middle" dominant-baseline="central">yolo26s_ft2, 1,120 px</text></g>
+<path d="M340 76 L340 92 L185 92 L185 104" class="arr" marker-end="url(#arrow15)"/>
+<g class="c-purple"><rect x="40" y="106" width="290" height="70" rx="8" stroke-width="0.5"/><text class="th" x="185" y="126" text-anchor="middle" dominant-baseline="central">Label check, pass 1</text><text class="ts" x="185" y="145" text-anchor="middle" dominant-baseline="central">every usable box checked</text><text class="ts" x="185" y="164" text-anchor="middle" dominant-baseline="central">+ 3,000 new training images</text></g>
+<path d="M185 176 L185 204" class="arr" marker-end="url(#arrow15)"/>
+<g class="c-teal"><rect x="40" y="206" width="290" height="90" rx="8" stroke-width="0.5"/><text class="th" x="185" y="226" text-anchor="middle" dominant-baseline="central">Run 6 · boost</text><text class="ts" x="185" y="245" text-anchor="middle" dominant-baseline="central">1,280 px · batch 4 · 30 epochs</text><text class="ts" x="185" y="264" text-anchor="middle" dominant-baseline="central">about 2 h · best at epoch 30</text><text class="ts" x="185" y="283" text-anchor="middle" dominant-baseline="central">validation best 0.880</text></g>
+<path d="M185 296 L185 312 L495 312 L495 324" class="arr" marker-end="url(#arrow15)"/>
+<g class="c-purple"><rect x="350" y="326" width="290" height="70" rx="8" stroke-width="0.5"/><text class="th" x="495" y="346" text-anchor="middle" dominant-baseline="central">Label check, pass 2</text><text class="ts" x="495" y="365" text-anchor="middle" dominant-baseline="central">boost as the second opinion</text><text class="ts" x="495" y="384" text-anchor="middle" dominant-baseline="central">200 decisions · 41 boxes changed</text></g>
+<path d="M495 396 L495 424" class="arr" marker-end="url(#arrow15)"/>
+<g class="c-teal"><rect x="350" y="426" width="290" height="90" rx="8" stroke-width="0.5"/><text class="th" x="495" y="446" text-anchor="middle" dominant-baseline="central">Run 7 · boost2</text><text class="ts" x="495" y="465" text-anchor="middle" dominant-baseline="central">1,600 px · batch 2 · 30 epochs</text><text class="ts" x="495" y="484" text-anchor="middle" dominant-baseline="central">3.5 h in total · best at epoch 28</text><text class="ts" x="495" y="503" text-anchor="middle" dominant-baseline="central">trained on the pass-2 labels</text></g>
+
+<path d="M490 48 L660 48 L660 471 L642 471" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrow15)"/><g><circle cx="262" cy="92" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="262" y="92" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">1</text></g><g><circle cx="185" cy="190" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="185" y="190" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">2</text></g><g><circle cx="340" cy="312" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="340" y="312" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">3</text></g><g><circle cx="495" cy="410" r="10" fill="var(--sel,#BA7517)" stroke="var(--card,#fff)" stroke-width="2"/><text x="495" y="410" text-anchor="middle" dominant-baseline="central" style="font:700 12px var(--font);fill:#fff">4</text></g></svg></div><ol class="seq">
+<li><b>1</b> Pass 1 of the label check, plus the 3,000 new training images, prepare the data.</li>
+<li><b>2</b> boost is fine-tuned from Run 5 on that data, at 1,280 px.</li>
+<li><b>3</b> boost becomes the second opinion for pass 2 of the label check.</li>
+<li><b>4</b> boost2 is fine-tuned on the pass-2 labels at 1,600 px. The dashed line: it starts from Run 5's weights too, not from boost.</li>
+</ol>
+<div class="key"><span><i class="sw t"></i>a training run</span><span><i class="sw p"></i>data: labels and images</span><span><i class="sw g"></i>the starting model</span></div>
+<p>Both runs start from Run 5's weights; boost2 is not trained from boost. boost was trained on the pass-1 labels; boost then served as the second opinion for the second label pass, and boost2 was trained on the pass-2 labels.</p>
+<h3>The two runs</h3>
+<div class="tablewrap"><table>
+<tr><th></th><th>Run 6: boost</th><th>Run 7: boost2</th></tr>
+<tr><td>Starts from</td><td>Run 5</td><td>Run 5</td></tr>
+<tr><td>Labels</td><td>pass 1</td><td>pass 2</td></tr>
+<tr><td>Input size</td><td>1,280 px</td><td>1,600 px</td></tr>
+<tr><td>Batch</td><td>4</td><td>2 (4 did not fit in 8 GB)</td></tr>
+<tr><td>Epochs</td><td>30</td><td>30</td></tr>
+<tr><td>Time</td><td>1.95 h (about 4 min per epoch)</td><td>3.47 h (about 7 min per epoch); a first attempt at batch 4 was abandoned in epoch 1</td></tr>
+<tr><td>Best epoch</td><td>30 (levelling off from about 23)</td><td>28</td></tr>
+</table></div>
+<p>boost's best validation score was 0.880. It is not comparable with Milestone 2's validation scores: the new validation set (292 images) includes rotated grids, scenes and cut-outs and is much harder.</p>
+<h3>Shared settings</h3>
+<ul>
+<li><b>Learning rate 0.002 with a cosine schedule:</b> small steps, so fine-tuning adjusts what Run 5 learned instead of overwriting it.</li>
+<li><b>Patience 10:</b> stop if validation does not improve for 10 epochs.</li>
+<li><b>Mosaic off:</b> the training images are already composites, so stitching four together would only make unrealistic jumbles.</li>
+<li><b>On the fly:</b> left–right flips (50%) and light zoom, shift and colour changes.</li>
+</ul>
+<h3>Why 1,280 px first, then 1,600</h3>
+<p>The input size is the model's internal magnification: the milestone images stay the same, the model enlarges them before looking and scales its boxes back exactly. At 1,600 px everything is enlarged ×1.43 compared with 1,120, so an object covering 1.1% of its photo grows from about 23 to about 33 pixels. The cost is about 1.56× the pixels of 1,280: much longer training and room for only a batch of 2.</p>
+<p>boost used 1,280 because the diagnosis showed small objects caused only about 5 of the 38 upright misses, and 1,600 roughly doubles the training time. boost2 then tested whether more magnification plus the pass-2 labels would pay off.</p>
+<h3>Working safely</h3>
+<ul>
+<li>Training could resume from the last saved epoch with the same settings, and a finished run was never overwritten by accident.</li>
+<li>boost2 reused boost's SAM cut-outs and photo cache, and left boost's files untouched.</li>
+<li>After every phase a fingerprint (hash) check confirmed the submitted Milestone 2 work was unchanged: Run 5's weights, its results file, <code>boxes_master.csv</code> and the original EYE.</li>
+</ul><p class="top"><a href="#contents">back to contents</a></p></section><section id="s20"><h2><span class="no">20</span>Testing and choosing</h2><p class="lede">How the final model was chosen by a rule sealed in advance, how its settings were chosen on validation, what one look at five test sets showed, and why boost2 was worth trying even though it lost.</p>
+<h3>1. The rule, sealed before any boost2 result</h3>
+<p>Written on 13 October 2026 into <code>selection_rule.txt</code>, while boost2 was still training:</p>
+<blockquote><p><i>boost2 replaces boost if its mAP@0.5:0.95 on the boost2 validation set (292 images, pass-2 labels) is higher than boost's on the same set, each at its own image size. Otherwise boost stays. Thresholds and post-processing are chosen on validation only. Test sets are reported for the selected model and do not influence the choice.</i></p></blockquote>
+<p>Its SHA-256 fingerprint (<code>C6A67BD9…F8C0</code>) was recorded at once, and the selection script refuses to decide if the file no longer matches: a prediction sealed in a dated envelope.</p>
+<h3>2. The decision: boost stayed</h3>
+<div class="tablewrap"><table>
+<tr><th>Model</th><th class="n">Input</th><th class="n">Validation mAP@0.5:0.95</th></tr>
+<tr class="sel"><td>boost (selected)</td><td class="n">1,280 px</td><td class="n">≈ 0.886</td></tr>
+<tr><td>boost2</td><td class="n">1,600 px</td><td class="n">0.878</td></tr>
+</table></div>
+<p>boost's score is derived from boost2's and the recorded difference of 0.0080.</p>
+<div class="figure" role="img" aria-label="Paired bootstrap interval of the difference, entirely below zero"><svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg"><line x1="130.0" x2="130.0" y1="30" y2="100" stroke="var(--rule)"/><text class="tl" x="130.0" y="120" text-anchor="middle">-0.015</text><line x1="246.7" x2="246.7" y1="30" y2="100" stroke="var(--rule)"/><text class="tl" x="246.7" y="120" text-anchor="middle">-0.010</text><line x1="363.3" x2="363.3" y1="30" y2="100" stroke="var(--rule)"/><text class="tl" x="363.3" y="120" text-anchor="middle">-0.005</text><line x1="480.0" x2="480.0" y1="30" y2="100" stroke="var(--rule)"/><text class="tl" x="480.0" y="120" text-anchor="middle">+0.000</text><line x1="596.7" x2="596.7" y1="30" y2="100" stroke="var(--rule)"/><text class="tl" x="596.7" y="120" text-anchor="middle">+0.005</text><line x1="480.0" x2="480.0" y1="24" y2="104" stroke="var(--line)" stroke-dasharray="4 4"/><line x1="148.7" x2="424.0" y1="65" y2="65" stroke="var(--ts)" stroke-width="4" stroke-linecap="round"/><circle cx="293.3" cy="65" r="7" fill="var(--ts)"/><text class="tb" x="293.3" y="48" text-anchor="middle">−0.0080 [−0.0142, −0.0024]</text><text class="tl" x="488.0" y="40">zero = no difference</text><text class="tl" x="340" y="142" text-anchor="middle">boost2 minus boost, validation mAP@0.5:0.95 (95% paired bootstrap, 1,000 resamples)</text></svg></div>
+<p>The paired bootstrap draws the 292 validation images at random with replacement, scores both models on the same draw, and repeats 1,000 times. 95% of differences fell between −0.0142 and −0.0024, and boost2 was higher in 0 of 1,000 draws: the interval excludes zero, so the difference is real. It is context only; the rule decides.</p>
+<h3>3. The settings, chosen on validation</h3>
+<p>One threshold for everything was compared with one for grids plus one for scenes; the pair was adopted only if F1 (the harmonic mean of precision and recall) rose by more than 0.003.</p>
+<div class="tablewrap"><table>
+<tr><th>Input</th><th class="n">Threshold</th><th>Duplicate handling</th></tr>
+<tr><td>Grids</td><td class="n">0.10</td><td>one box per 224-pixel cell</td></tr>
+<tr><td>Scenes</td><td class="n">0.35</td><td>class-agnostic duplicate removal: where boxes overlap heavily, keep one, whatever object they name</td></tr>
+</table></div>
+<h3>4. One look at the test sets</h3>
+<div class="figure" role="img" aria-label="Recall on five test sets, Milestone 2 model against the selected model"><svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg"><line x1="70" x2="640" y1="230.0" y2="230.0" stroke="var(--rule)"/><text class="tl" x="60" y="234.0" text-anchor="end">0.00</text><line x1="70" x2="640" y1="182.5" y2="182.5" stroke="var(--rule)"/><text class="tl" x="60" y="186.5" text-anchor="end">0.25</text><line x1="70" x2="640" y1="135.0" y2="135.0" stroke="var(--rule)"/><text class="tl" x="60" y="139.0" text-anchor="end">0.50</text><line x1="70" x2="640" y1="87.5" y2="87.5" stroke="var(--rule)"/><text class="tl" x="60" y="91.5" text-anchor="end">0.75</text><line x1="70" x2="640" y1="40.0" y2="40.0" stroke="var(--rule)"/><text class="tl" x="60" y="44.0" text-anchor="end">1.00</text><rect x="90" y="56.7" width="36" height="173.3" rx="3" class="bar-g"/><rect x="132" y="49.7" width="36" height="180.3" rx="3" class="bar-ok"/><text class="tl" x="108" y="50.7" text-anchor="middle">0.912</text><text class="tb" x="150" y="43.7" text-anchor="middle">0.949</text><text class="tb" x="129" y="252" text-anchor="middle">Normal</text><rect x="202" y="86.4" width="36" height="143.6" rx="3" class="bar-g"/><rect x="244" y="54.8" width="36" height="175.2" rx="3" class="bar-ok"/><text class="tl" x="220" y="80.4" text-anchor="middle">0.756</text><text class="tb" x="262" y="48.8" text-anchor="middle">0.922</text><text class="tb" x="241" y="252" text-anchor="middle">Rotated</text><rect x="314" y="84.3" width="36" height="145.7" rx="3" class="bar-g"/><rect x="356" y="59.6" width="36" height="170.4" rx="3" class="bar-ok"/><text class="tl" x="332" y="78.3" text-anchor="middle">0.767</text><text class="tb" x="374" y="53.6" text-anchor="middle">0.897</text><text class="tb" x="353" y="252" text-anchor="middle">Scattered</text><rect x="426" y="144.1" width="36" height="85.9" rx="3" class="bar-g"/><rect x="468" y="62.6" width="36" height="167.4" rx="3" class="bar-ok"/><text class="tl" x="444" y="138.1" text-anchor="middle">0.452</text><text class="tb" x="486" y="56.6" text-anchor="middle">0.881</text><text class="tb" x="465" y="252" text-anchor="middle">Cut-outs</text><rect x="538" y="58.0" width="36" height="172.0" rx="3" class="bar-g"/><rect x="580" y="49.3" width="36" height="180.7" rx="3" class="bar-ok"/><text class="tl" x="556" y="52.0" text-anchor="middle">0.905</text><text class="tb" x="598" y="43.3" text-anchor="middle">0.951</text><text class="tb" x="577" y="252" text-anchor="middle">Singles</text></svg></div>
+<div class="key"><span><i class="sw g"></i>Milestone 2 model</span><span><i class="sw t"></i>boost with the final settings</span></div>
+<div class="tablewrap"><table>
+<tr><th>Test set</th><th class="n">Recall</th><th class="n">Precision</th><th class="n">Wrong IDs</th><th class="n">Fully correct</th><th class="n">mAP@0.5</th></tr>
+<tr><td>Normal grids</td><td class="n">0.912 → 0.949</td><td class="n">0.950 → 0.970</td><td class="n">16 → 10</td><td class="n">34.7% → 47.2%</td><td class="n">0.947 → 0.971</td></tr>
+<tr><td>Rotated grids</td><td class="n">0.756 → 0.922</td><td class="n">0.845 → 0.947</td><td class="n">230 → 58</td><td class="n">9.3% → 34.7%</td><td class="n">0.813 → 0.953</td></tr>
+<tr><td>Scattered scenes</td><td class="n">0.767 → 0.897</td><td class="n">0.830 → 0.943</td><td class="n">33 → 17</td><td class="n">8.6% → 25.0%</td><td class="n">0.803 → 0.936</td></tr>
+<tr><td>Cut-outs</td><td class="n">0.452 → 0.881</td><td class="n">0.799 → 0.914</td><td class="n">70 → 61</td><td class="n">0% → 28.8%</td><td class="n">0.559 → 0.912</td></tr>
+<tr><td>Single photos</td><td class="n">0.905 → 0.951</td><td class="n">0.954 → 0.968</td><td class="n">12 → 11</td><td class="n">90.4% → 95.1%</td><td class="n">0.941 → 0.970</td></tr>
+</table></div>
+<p class="note">The Milestone 2 model is shown at its own settings (threshold 0.10, no scene rule). At the final settings it finds 0.730 of scattered and 0.368 of cut-out objects, the comparison used in the final report.</p>
+<h3>5. Reading the results</h3>
+<ul>
+<li>Better on every test set and every measure, normal grids included.</li>
+<li>Rotation largely solved: recall 0.756 → 0.922, wrong IDs down by three quarters.</li>
+<li>Cut-outs 0.452 → 0.881 reveal that the old model had partly been recognising backgrounds.</li>
+<li>The honest trade-off: the low grid threshold accepts more doubtful names; on rotated grids boost made 58 wrong IDs with the final settings against 41 at the evaluation's single threshold of 0.40, still far below the old model's 230.</li>
+<li>The scattered and cut-out scenes are synthetic, built from unseen test photos and backgrounds; they test robustness but are not real cluttered rooms.</li>
+</ul>
+<h3>Why boost2 was tried, and what was weak about it</h3>
+<p><b>Why it made sense.</b> The diagnosis's "small objects caused about 5 of 38 misses" applied to upright grids, where every photo fills a 224-pixel cell. In the new scenes objects appear at random, often small sizes, and after boost small-object recall was the weakest number left: 0.859 on normal grids, 0.710 rotated, 0.623 scattered, 0.632 cut-outs. More magnification is the textbook remedy. boost2 also carried the pass-2 labels; the forecast was a modest gain and explicitly not guaranteed. The risk was low: boost stayed as the fallback and the sealed rule could only reject a worse model.</p>
+<p><b>What was weak.</b> boost2 changed resolution, labels and batch size (2 instead of 4) at once, so its loss cannot be pinned on 1,600 px alone; a cleaner test would have trained 1,280 px on the pass-2 labels first. It also cost almost twice the training time: 3.47 hours against boost's 1.95, after a batch-4 attempt was abandoned in its first epoch. Still, a negative result is a result: more magnification was not the bottleneck for this model and data.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s21"><h2><span class="no">21</span>Why training stopped</h2><p class="lede">Why no further fine-tuning was done after boost, and how that was decided.</p>
+<p>There was no formal stopping rule like the sealed selection rule; it was a judgment based on the options the records preserve.</p>
+<div class="tablewrap"><table>
+<tr><th>Option</th><th>Expected gain</th><th>Cost or risk</th></tr>
+<tr><td>Train longer</td><td>none</td><td>boost had plateaued from epoch 23</td></tr>
+<tr><td>Higher resolution</td><td>tested as boost2</td><td>it lost, after 3.47 hours of training</td></tr>
+<tr><td>Bigger model (YOLO26-m at 1,280 px)</td><td>about +1–2 points</td><td>about twice the training time; the 8 GB GPU was at its limit</td></tr>
+<tr><td>Ensemble of boost and boost2</td><td>about +0.5–1 point</td><td>slower detection; two models in the EYE. Tested properly in Milestone 4 as COMPOUND (<a href="#s23">lesson 23</a>)</td></tr>
+<tr><td>A threshold per object</td><td>uncertain</td><td>73 thresholds tuned on 292 images would fit validation</td></tr>
+<tr><td>More data</td><td>–</td><td>impossible: the dataset is fixed</td></tr>
+</table></div>
+<ul>
+<li>The week's goals (recall towards 0.96–0.97, wrong IDs under about 10) were essentially met: normal-grid recall 0.949, 10 wrong IDs, gains on every test set.</li>
+<li>The remaining errors (tiny, dark, look-alike objects) are limited by the photos, not by training time.</li>
+<li>Every further round decided after seeing test numbers drifts toward fitting the test.</li>
+<li>On 72 grids one point of recall is about 10 objects, with roughly ±1.3 points of uncertainty, so a gain of 0.5–1 point would be hard to tell from noise.</li>
+<li>The time went into the second label pass, the EYE, the report and sharing.</li>
+</ul><p class="top"><a href="#contents">back to contents</a></p></section><h1 class="part" id="milestone-4">Milestone 4</h1><section id="s22"><h2><span class="no">22</span>Checking our own numbers</h2><p class="lede">Why the final milestone re-read every number from the files, and what a second measurement run found that the earlier reports could not.</p>
+<h3>1. A fact sheet, and three answer keys</h3><p>The milestone reports were written under deadline, one at a time. For the final report every number was re-read from the project's result files into a fact sheet with its source; where an earlier report was wrong, the correction is listed with its evidence (for example, the Milestone 2 report's 0.506 on degraded grids belonged to Run 4; the selected Run 5 scores 0.428). Some numbers legitimately differ because the answer key changed:</p><div class="tablewrap"><table>
+<tr><th>Answer key</th><th>What it is</th><th class="n">Normal-grid objects</th></tr>
+<tr><td>T1</td><td>the Milestone 2 test boxes</td><td class="n">1,041</td></tr><tr><td>T2</td><td>after pass 1 of the label check</td><td class="n">1,044</td></tr><tr><td>T3</td><td>after pass 2: the best available truth</td><td class="n">1,048</td></tr>
+</table></div><h3>2. Did correcting the test labels favour boost?</h3><p>Pass 2 of the label check used boost's disagreements to find label errors, and of its 17 test-box fixes, the new box is closer to boost's prediction in <b>14</b>. People made every decision, but the answer key moved towards boost. Scoring the same predictions against T1, T2 and T3 measures the effect: boost's lead in recall grows from <b>3.17</b> points on T1 to <b>3.82</b> on T3. About 0.6 points came from the correction, so the honest, bias-free gain on normal grids is the T1 one: recall 0.912 → 0.943.</p><h3>3. Does the detector name objects as well as the classifier?</h3><p>On exactly the same 1,040 single test photos, asking only whether the top answer names the right object:</p><div class="tablewrap"><table>
+<tr><th>Model</th><th class="n">Named correctly</th></tr>
+<tr><td>Milestone 1 classifier (ConvNeXt-Tiny)</td><td class="n">99.5%</td></tr><tr><td>boost (the final detector)</td><td class="n">97.2%</td></tr><tr><td>Milestone 2 model</td><td class="n">94.7%</td></tr>
+</table></div><p>The specialist still names best: it is right on 25 photos that boost gets wrong, boost on only one that the classifier gets wrong. That points to a future design: a detector that finds, and a classifier that names.</p><h3>4. Two results that run against the improvement</h3><ul><li><b>Heavily degraded images:</b> boost is worse than the Milestone 2 model (mAP@0.5 0.393 against 0.465; 156 wrong IDs against 65). The weakness found in Milestone 1 is the one thread the project did not close.</li><li><b>Empty backgrounds:</b> boost puts a box on 35% of 100 unseen background photos, the Milestone 2 model on 14%; a box names the photographer's own object in only 6% and 4%. The final detector rarely mistakes a room for its owner's object, but it is more eager to see something where nothing is.</li></ul><h3>5. Things that held</h3><p>Every reproduction matched the saved results to four decimals; the Milestone 3 stress test (858 of 900 objects, 65.0% of grids fully correct) was reproduced exactly, now with per-grid data; and all three detectors turned out to be the same network (10,004,366 parameters), differing only in input size: 72, 95 and 152 GFLOPs, 34, 36 and 54 ms per 3x3 grid.</p><p class="top"><a href="#contents">back to contents</a></p></section><section id="s23"><h2><span class="no">23</span>COMPOUND: combining the best models</h2><p class="lede">Whether the project's best models could be merged into one better answer, how the experiment was designed so it could fail honestly, and why it did.</p>
+<h3>1. The idea</h3><p>Each model had a measured strength: boost on rotation and scenes, the Milestone 2 model on degraded test images, a YOLOv8-s as a different architecture, and the classifier as the best namer. An insect's compound eye merges many small eyes into one picture; COMPOUND tried the same.</p><h3>2. A design that can fail honestly</h3><div class="figure" role="img" aria-label="The COMPOUND experiment"><svg viewBox="0 0 680 432" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowm4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><g class="c-gray"><rect x="20" y="14" width="640" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="34" text-anchor="middle" dominant-baseline="central">Five members</text><text class="ts" x="340.0" y="53" text-anchor="middle" dominant-baseline="central">boost · boost2 · Milestone 2 model · Run 3 (YOLOv8-s) · Milestone 1 classifier</text></g><path d="M340 70 L340 90" class="arr" marker-end="url(#arrowm4)"/><g class="c-gray"><rect x="20" y="92" width="640" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="112" text-anchor="middle" dominant-baseline="central">Predictions cached on validation only</text><text class="ts" x="340.0" y="131" text-anchor="middle" dominant-baseline="central">292 images · a degraded copy of the 68 grids · 53 backgrounds · 5 folds</text></g><path d="M180 148 L180 170" class="arr" marker-end="url(#arrowm4)"/><path d="M500 148 L500 170" class="arr" marker-end="url(#arrowm4)"/><g class="c-teal"><rect x="20" y="172" width="320" height="74" rx="8" stroke-width="0.5"/><text class="th" x="180.0" y="192" text-anchor="middle" dominant-baseline="central">Seven stages, added one at a time</text><text class="ts" x="180.0" y="211" text-anchor="middle" dominant-baseline="central">orientation · fusion · calibration · naming</text><text class="ts" x="180.0" y="229" text-anchor="middle" dominant-baseline="central">gap filling · quality weighting · arbiter</text></g><g class="c-gray"><rect x="360" y="172" width="300" height="74" rx="8" stroke-width="0.5"/><text class="th" x="510.0" y="192" text-anchor="middle" dominant-baseline="central">Five simpler baselines</text><text class="ts" x="510.0" y="211" text-anchor="middle" dominant-baseline="central">boost alone · + flip · + classifier</text><text class="ts" x="510.0" y="229" text-anchor="middle" dominant-baseline="central">boost + boost2 · boost + Run 3</text></g><path d="M180 246 L180 268" class="arr" marker-end="url(#arrowm4)"/><path d="M510 246 L510 268" class="arr" marker-end="url(#arrowm4)"/><g class="c-purple"><rect x="20" y="270" width="640" height="74" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="290" text-anchor="middle" dominant-baseline="central">Rule sealed before the test (SHA-256 4147CFB9…3721)</text><text class="ts" x="340.0" y="309" text-anchor="middle" dominant-baseline="central">fully correct +2 points · no kind of image loses over 0.5 recall points</text><text class="ts" x="340.0" y="327" text-anchor="middle" dominant-baseline="central">no more false boxes on empty backgrounds</text></g><path d="M340 344 L340 366" class="arr" marker-end="url(#arrowm4)"/><g class="c-gray"><rect x="120" y="368" width="440" height="56" rx="8" stroke-width="0.5"/><text class="th" x="340.0" y="388" text-anchor="middle" dominant-baseline="central">No candidate eligible: boost stays</text><text class="ts" x="340.0" y="407" text-anchor="middle" dominant-baseline="central">kept only as an explanation view in the EYE</text></g></svg></div><p>Every setting was chosen on four folds of validation and scored on the fifth, from short lists fixed in advance. The rule's text was fixed in the instructions before the run; the file and its fingerprint were written after one-line validation summaries of a discarded first run had been seen, while the code was unchanged from before both runs, and the decision was recorded before any test prediction existed. Writing that down is what makes the result trustworthy.</p><h3>3. The result</h3><div class="tablewrap"><table>
+<tr><th>Candidate</th><th class="n">Fully correct (validation)</th><th class="n">Cut-out recall</th><th class="n">False boxes on backgrounds</th></tr>
+<tr><td>B0 · boost alone</td><td class="n">46.2%</td><td class="n">0.903</td><td class="n">15</td></tr><tr><td>Best combinations (C6, C7)</td><td class="n">53.1%</td><td class="n">0.882</td><td class="n">18–28 across C1–C7</td></tr>
+</table></div><h3>4. Why it failed, and what that teaches</h3><ul><li><b>Combination helps grids and hurts scenes.</b> Fusing boxes merged neighbouring objects in crowded scenes and let weak lone boxes through on empty backgrounds, while recall on degraded grids rose by 7.7 to 13.1 points.</li><li><b>Orientation correction defeated itself.</b> It picked the right angle for only 37 of 68 rotated grids and turned 29 of 68 upright grids sideways: boost, trained on rotated photos, is almost equally confident at every angle. The robustness Milestone 3 added removed the signal the trick relied on.</li><li><b>An intuition from the test set did not hold on validation:</b> the learned weights favoured Run 3 and boost on poor images, not the Milestone 2 model.</li></ul><div class="note">Combining models on grids only would probably pass, but it was suggested by these results on a validation set used four times. Testing it here would be choosing after the fact, so it is left for new data. A negative result, measured this carefully, is still a result.</div><p class="top"><a href="#contents">back to contents</a></p></section><section id="s24"><h2><span class="no">24</span>What the whole project taught</h2><p class="lede">The threads that run through all four milestones, the three lessons that carry beyond this dataset, and what we would do differently.</p>
+<h3>1. Four threads</h3><div class="tablewrap"><table>
+<tr><th>Thread</th><th class="n">Milestone 1</th><th class="n">Milestone 2</th><th class="n">Milestone 3 and 4</th></tr>
+<tr><td>Reliance on the room</td><td class="n">empty rooms named as the photographer's object 35.7%</td><td class="n">cut-out recall 0.368</td><td class="n">cut-out recall 0.881; but more boxes on empty backgrounds</td></tr><tr><td>Low-quality photos</td><td class="n">the hardest condition (best 51.7%)</td><td class="n">degraded grids mAP@0.5 0.428</td><td class="n">boost worse than its predecessor: not repaired</td></tr><tr><td>Look-alikes</td><td class="n">sunglasses and dark devices confused</td><td class="n">paddle, card wallet and watches weakest</td><td class="n">paddle AP@0.5 0.58 → 0.94</td></tr><tr><td>Label consistency</td><td class="n">folder labels 98.3% consistent</td><td class="n">tissue box AP 0.30 → 0.995 from one rule</td><td class="n">every box checked; the commonest upright miss had often been a label problem</td></tr>
+</table></div><h3>2. Three lessons that carry beyond this dataset</h3><ol><li><b>Pretrained weights decide first.</b> About ten points in Milestone 1, and a 73-class detector on one laptop GPU.</li><li><b>Consistent labels matter more than a better architecture.</b> One rule moved the tissue box from AP 0.30 to 0.995; checking every box was the most valuable step of Milestone 3.</li><li><b>Only decisions made on validation, by rules fixed before the results, make a number worth reporting</b>, including the numbers that say a promising idea did not work.</li></ol><h3>3. What we would do differently</h3><ul><li>Check every box from the start, not after two rounds of label rules.</li><li>Change one thing at a time: boost2 changed image size, labels and batch size together, so its result cannot be attributed.</li><li>Correct test labels without the candidate model's help, or with two independent second opinions.</li><li>Keep a final test set untouched until the last milestone.</li><li>Save every output where it can be re-read, and keep the fact sheet up to date as you go.</li><li>Train for the worst condition explicitly: the photo damage used in Milestone 3 was milder than the degraded test.</li></ul><p class="top"><a href="#contents">back to contents</a></p></section>
+<footer>IE7615 Deep Learning · Group 7 · Milestones 1 to 4. Compiled from the lesson pages, the final report and the project records.</footer>
+</main></body>
+</html>
