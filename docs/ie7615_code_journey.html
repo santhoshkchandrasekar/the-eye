@@ -73,7 +73,7 @@ footer{grid-column:1/-1;color:var(--ink2);font-size:14px;border-top:1px solid va
 </header>
 <div class="journey" id="journey"></div>
 <aside class="detail" id="detail" aria-live="polite"><p class="empty">Click any file on the left to see its jobs.</p></aside>
-<footer>IE7615 Deep Learning · Group 7. Built from the project records, the reports and an AI coding assistant's read-outs of the files. Only files on record are shown; the Milestone 2 review tool, for example, is not listed because its file name is not recorded.</footer>
+<footer>IE7615 Deep Learning · Group 7. Built from the project records, the reports and read-outs of the files. Only files on record are shown; the Milestone 2 review tool, for example, is not listed because its file name is not recorded.</footer>
 </div>
 <script>
 const MS = [
@@ -118,12 +118,12 @@ const F = [
    jobs: {
     "Data": ["Places 224-pixel photos into grids from 2x2 to 5x5 and moves each box with its photo.",
              "Writes the images, one YOLO label file per image and the dataset file with the 73 class names.",
-             "Builds 1,500 training images once and keeps them fixed: Runs 1–4 grids only (~300 per size); Run 5 85% grids (half with look-alikes side by side) and 15% single photos. Which exact set Runs 1–2 used is still an open question.",
+             "Builds 1,500 training images once and keeps them fixed: Runs 1 to 4 grids only (~300 per size); Run 5 85% grids (half with look-alikes side by side) and 15% single photos. Which exact set Runs 1 and 2 used is still an open question.",
              "Validation: 68 grids, 972 objects. Test: 72 grids (16 of 2x2, 14 each of 3x3, 4x4, 5x4, 5x5), plus 84 images of other input types."],
     "Augmentation": ["Baked into the files: about 20% of training images blurred, low-resolution, JPEG-compressed or dark.",
                      "On the fly, every time an image is loaded (Ultralytics): flips, colour and brightness, mosaic, small zoom and shift."],
     "Training": ["Run 1: YOLOv8-s from COCO, stopped early after 56 epochs. Run 2: YOLO26-s from COCO, 60 epochs.",
-                 "Settings: 1,120 px input, batch 4, cosine learning rate, mosaic 0.5; Runs 1–2 stop after 12 flat epochs, the fine-tunes after 6, with learning rate 0.002 and no warm-up.",
+                 "Settings: 1,120 px input, batch 4, cosine learning rate, mosaic 0.5; Runs 1 and 2 stop after 12 flat epochs, the fine-tunes after 6, with learning rate 0.002 and no warm-up.",
                  "After the sneaker rule: Run 3 (Run 1 + 15 epochs) and Run 4 (Run 2 + 15 epochs).",
                  "After four more label rules, single photos and look-alike grids: Run 5 (Run 4 + 15 epochs)."],
     "Validation": ["Scores each run on validation after every epoch and keeps the best epoch (best.pt).",
@@ -131,9 +131,9 @@ const F = [
                    "Chooses the settings on validation: confidence 0.10, one box per 224-pixel cell, small images at natural size."],
     "Testing": ["Tests the chosen model once: mAP@0.5 0.947, precision 0.931, recall 0.918, single photos 14 of 14."]
    } },
- { ms: "m2", name: "m2_cross_eval.py", what: "Cross-evaluation of the teammates' pipelines", runs: ["runs A–C vs Selected"],
+ { ms: "m2", name: "m2_cross_eval.py", what: "Cross-evaluation of the teammates' pipelines", runs: ["runs A to C vs Selected"],
    jobs: {
-    "What it does": ["Scores the teammates' alternative pipelines (runs A–C) and the selected model on the same human-checked test set, so all are judged on identical truth.",
+    "What it does": ["Scores the teammates' alternative pipelines (runs A to C) and the selected model on the same human-checked test set, so all are judged on identical truth.",
                      "Uses masking so that differences in what each pipeline labelled do not distort the comparison."],
     "Note": ["The teammates' pipelines are not covered in the lessons; the detailed results are in the Milestone 2 report."]
    } },
@@ -219,7 +219,7 @@ const F = [
    } },
  { ms: "m3", name: "fix_paths.py", what: "Updates file paths after the folder restructure",
    jobs: {
-    "What it does": ["Created by an AI coding assistant after the project folders were reorganised into Milestone 2 and Milestone 3, to update paths inside the copies that needed it."],
+    "What it does": ["Created after the project folders were reorganised into Milestone 2 and Milestone 3, to update paths inside the copies that needed it."],
     "Why it matters": ["Copies may therefore differ from the originals, so later updates were checked before overwriting anything."]
    } },
  { ms: "m3", name: "start_share.ps1 · stop_share.ps1 · restore_power.ps1", what: "Shares the EYE by link through a Cloudflare tunnel (PowerShell)",
@@ -244,9 +244,9 @@ const F = [
                          "Degraded images, where boost is worse (mAP@0.5 0.393 vs 0.465), and empty backgrounds (boxes on 35% vs 14%) (items 4 and 6).",
                          "Per-object changes, the stress test reproduced exactly, speed and size (items 5, 7 and 8)."],
     "How": ["Read-only: the same weights, test sets and scoring code as Milestone 3; every reproduction matched the saved results to four decimals.",
-            "Written and run by an AI coding assistant under our instructions; a listing of all project files was identical before and after."]
+            "Run under our instructions; a listing of all project files was identical before and after."]
    } },
- { ms: "m4", name: "compound.py · make_report.py", what: "COMPOUND: can the best models be combined?", runs: ["B0–B4", "C1–C7"],
+ { ms: "m4", name: "compound.py · make_report.py", what: "COMPOUND: can the best models be combined?", runs: ["B0 to B4", "C1 to C7"],
    produces: "COMPOUND_RESULTS.md · COMPOUND_RESULTS.json · decision_table.csv · PROVENANCE.md",
    jobs: {
     "Design": ["Members: boost, boost2, the Milestone 2 model, Run 3 (YOLOv8-s) and the Milestone 1 classifier; predictions cached on validation only.",

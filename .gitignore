@@ -34,3 +34,5 @@ EYE_DEPLOY.zip
 Dataset*/
 *.zip
 .env
+.[assistant]
+[assistant].md

@@ -17,13 +17,13 @@ An object detector for 73 everyday objects that explains every prediction: what 
 
 ## Results
 
-Read from the live demo's [`/api/config`](https://the-eye-detector.duckdns.org/api/config). Selected model: `yolo26s_boost`; the earlier model is the Milestone 2 detector `yolo26s_ft2`. All numbers are on held-out test data.
+From the [final report](docs/IE7615_Final_Report_Group7.pdf), Section 7.3 "Final results", Table 9 (mAP@0.5 also in Appendix B, Table 20). The selected model is `boost` (`yolo26s_boost`); the earlier model is the Milestone 2 detector (`yolo26s_ft2`). All figures are measured on the held-out test sets after every test box was checked by a person (answer key T3, final settings), with 95% bootstrap intervals in brackets.
 
-| Measure | Milestone 2 model | Selected model |
+| Measure | Milestone 2 model | boost |
 |---|---|---|
-| Test mAP@0.5, grids | 0.947 | **0.971** |
-| Recall, rotated grids | 0.756 | **0.909** |
-| Recall, cut-out objects on new backgrounds | 0.452 | **0.876** |
+| Test mAP@0.5, normal grids | 0.947 | **0.971** |
+| Recall, rotated grids | 0.756 [0.743, 0.769] | **0.922** [0.914, 0.930] |
+| Recall, cut-out objects on new backgrounds | 0.368 [0.339, 0.397] | **0.881** [0.862, 0.901] |
 
 - **mAP@0.5:** mean average precision, counting a box as correct when it overlaps the true box by at least 50 percent.
 - **Recall, rotated grids:** share of objects found when the whole grid of photos is rotated.

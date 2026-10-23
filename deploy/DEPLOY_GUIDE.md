@@ -3,9 +3,12 @@
 Free Oracle Cloud ARM server · free DuckDNS address · automatic HTTPS with Caddy. About an afternoon.
 
 ## 1 · Build the deployment folder (laptop)
-Run the prompt in `ASSEMBLE_PROMPT.md` in an AI coding assistant. You get `EYE_DEPLOY.zip` plus a report with CPU timings.
-Check the report: the model list must hold **all seven detectors** (Milestone 2 Runs 1–5, boost and boost2) plus
-`panel_cls: true` for the classifier, and no path mismatches. (COMPOUND compares four of them, boost, boost2, Run 5 and
+Create a folder `EYE_DEPLOY` holding `m2_eye_app_v35.py`, `eye.service`, a `requirements.txt` and a `project/` folder: a copy of
+the project folder the EYE reads, with every detector's `best.pt`, the classifier, the settings and label files and the test photos,
+each at its original relative path (Linux is case-sensitive, so spelling and case must match exactly). Write `requirements.txt` from
+the EYE's imports without CUDA suffixes such as `+cu121` (the server has no GPU), using `opencv-python-headless`. Start the EYE
+once from that folder with `M2_PUBLIC=1` and the GPU hidden, and check that `/api/config` lists **all seven detectors**
+(Milestone 2 Runs 1 to 5, boost and boost2) plus `panel_cls: true` for the classifier. Then zip it as `EYE_DEPLOY.zip`. (COMPOUND compares four of them, boost, boost2, Run 5 and
 Run 3, plus the classifier; the Model menu offers all seven.)
 
 ## 2 · Create the server (Oracle Cloud console)
