@@ -18,7 +18,6 @@ images_224.npy
 .DS_Store
 __pycache__/
 .ipynb_checkpoints/
-.[assistant]/
 
 # THE EYE: never publish weights, keys, server state, deployment bundles, datasets or secrets
 *.pt
@@ -34,5 +33,3 @@ EYE_DEPLOY.zip
 Dataset*/
 *.zip
 .env
-.[assistant]
-[assistant].md
