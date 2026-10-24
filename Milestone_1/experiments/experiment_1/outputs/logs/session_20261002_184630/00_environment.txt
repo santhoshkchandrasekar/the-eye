@@ -37,8 +37,8 @@ Fri Oct  2 18:46:33 2026
 |    0   N/A  N/A           19188    C+G   ....0.4258.48\msedgewebview2.exe      N/A      |
 |    0   N/A  N/A           24396    C+G   ...8bbwe\Microsoft.CmdPal.UI.exe      N/A      |
 |    0   N/A  N/A           26372    C+G   ...Chrome\Application\chrome.exe      N/A      |
-|    0   N/A  N/A           30936    C+G   ...aude\app-2.19675.0\helper.exe      N/A      |
-|    0   N/A  N/A           34408    C+G   ...aude\app-2.19675.0\helper.exe      N/A      |
+|    0   N/A  N/A           30936    C+G   ...\app-2.19675.0\helper.exe      N/A      |
+|    0   N/A  N/A           34408    C+G   ...\app-2.19675.0\helper.exe      N/A      |
 |    0   N/A  N/A           38764    C+G   ...bwe\YourPhoneAppProxyHost.exe      N/A      |
 |    0   N/A  N/A           43444    C+G   ...Chrome\Application\chrome.exe      N/A      |
 +-----------------------------------------------------------------------------------------+
