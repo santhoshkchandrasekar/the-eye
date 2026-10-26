@@ -38,7 +38,7 @@ From the [final report](docs/IE7615_Final_Report_Group7.pdf), Section 7.3 "Final
 
 ## Tech
 
-PyTorch, Ultralytics YOLO, OWLv2, SAM 2.1, a Python HTTP server, hand-written HTML/CSS/JavaScript/SVG, Caddy, Oracle Cloud.
+PyTorch, Ultralytics YOLO, OWLv2, SAM 2.1, a Python HTTP server, HTML/CSS/JavaScript/SVG, Caddy, Oracle Cloud.
 
 ## Repository layout
 
